@@ -9,10 +9,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Onboarding',
+        title: 'JungleFeast',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+            // primarySwatch: Colors.blue,
+            ),
         debugShowCheckedModeBanner: false,
         home: const StartingPage());
   }
