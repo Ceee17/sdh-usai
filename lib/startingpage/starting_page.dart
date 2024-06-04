@@ -1,108 +1,87 @@
-import 'package:concentric_transition/concentric_transition.dart';
 import 'package:flutter/material.dart';
-
-final pages = [
-  const PageData(
-    icon: Icons.food_bank_outlined,
-    title: "Search for your favourite food",
-    bgColor: Color(0xff3b1791),
-    textColor: Colors.white,
-  ),
-  const PageData(
-    icon: Icons.shopping_bag_outlined,
-    title: "Add it to cart",
-    bgColor: Color(0xfffab800),
-    textColor: Color(0xff3b1790),
-  ),
-  const PageData(
-    icon: Icons.delivery_dining,
-    title: "Order and wait",
-    bgColor: Color(0xffffffff),
-    textColor: Color(0xff3b1790),
-  ),
-];
 
 class StartingPage extends StatelessWidget {
   const StartingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: ConcentricPageView(
-        colors: pages.map((p) => p.bgColor).toList(),
-        radius: screenWidth * 0.1,
-        nextButtonBuilder: (context) => Padding(
-          padding: const EdgeInsets.only(left: 3), // visual center
-          child: Icon(
-            Icons.navigate_next,
-            size: screenWidth * 0.08,
+    return Container(
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: 6, right: 6),
+            child: Center(
+              child: Text(
+                '“The only trip you will regret\nis the one You didn’t take”',
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: "Poppins",
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
-        ),
-        // enable itemcount to disable infinite scroll
-        // itemCount: pages.length,
-        // opacityFactor: 2.0,
-        scaleFactor: 2,
-        // verticalPosition: 0.7,
-        // direction: Axis.vertical,
-        // itemCount: pages.length,
-        // physics: NeverScrollableScrollPhysics(),
-        itemBuilder: (index) {
-          final page = pages[index % pages.length];
-          return SafeArea(
-            child: _Page(page: page),
-          );
-        },
+          Container(
+            margin: EdgeInsets.only(top: 17),
+            child: Image.asset(
+              'assets/startingpage.png',
+              height: 120,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 10),
+            child: Center(
+              child: Text(
+                "Are you ready to have fun with us? Let’s trust us and\n"
+                "share your dream holiday with us!\n"
+                "Welcome to Junglefeast",
+                textDirection: TextDirection.ltr,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w300,
+                  fontFamily: "Poppins",
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  transitionDuration: Duration(milliseconds: 850),
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      // child: LoginPage(),
+                    );
+                  },
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFFFA62F),
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(horizontal: 120, vertical: 15),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+            ),
+            child: Text('Get Started!',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                )),
+          )
+        ],
       ),
-    );
-  }
-}
-
-class PageData {
-  final String? title;
-  final IconData? icon;
-  final Color bgColor;
-  final Color textColor;
-
-  const PageData({
-    this.title,
-    this.icon,
-    this.bgColor = Colors.white,
-    this.textColor = Colors.black,
-  });
-}
-
-class _Page extends StatelessWidget {
-  final PageData page;
-
-  const _Page({Key? key, required this.page}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          margin: const EdgeInsets.all(16.0),
-          decoration:
-              BoxDecoration(shape: BoxShape.circle, color: page.textColor),
-          child: Icon(
-            page.icon,
-            size: screenHeight * 0.1,
-            color: page.bgColor,
-          ),
-        ),
-        Text(
-          page.title ?? "",
-          style: TextStyle(
-              color: page.textColor,
-              fontSize: screenHeight * 0.035,
-              fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-      ],
     );
   }
 }
