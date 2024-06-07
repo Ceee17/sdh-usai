@@ -37,7 +37,6 @@ dependencies:
   concentric_transition: ^1.0.3
   fluttertoast: ^8.2.2
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/startingpage/starting_page.dart';
 import 'package:uas/auth/register_page.dart';
 
-
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -24,6 +23,7 @@ class LoginPage extends StatelessWidget {
     final width = size.width;
 
     return Scaffold(
+      backgroundColor: Color(0xffffffff),
       body: SafeArea(
         child: Stack(
           children: [
@@ -53,7 +53,8 @@ class LoginPage extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(7),
                           ),
-                          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
                           fillColor: Color(0xffffffff),
                           labelText: 'E-mail',
@@ -67,7 +68,8 @@ class LoginPage extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(7),
                           ),
-                          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
                           fillColor: Color(0xffffffff),
                           labelText: 'Password',
@@ -80,14 +82,15 @@ class LoginPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Placeholder(), // Placeholder for ForgotPasswordPage
+                                builder: (context) =>
+                                    Placeholder(), // Placeholder for ForgotPasswordPage
                               ),
                             );
                           },
                           child: Text(
                             'Forgot Password?',
                             style: TextStyle(
-                              color: Color(0xffffffff),
+                              color: Color(0xff000000),
                               fontSize: width * 0.035,
                               fontWeight: FontWeight.w400,
                             ),
@@ -99,13 +102,16 @@ class LoginPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (context) => StartingPage()),
+                            MaterialPageRoute(
+                                builder: (context) => StartingPage()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFFA62F),
                           foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: width * 0.25, vertical: height * 0.01),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: width * 0.25,
+                              vertical: height * 0.01),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
@@ -118,11 +124,11 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: height * 0.03),
+                      SizedBox(height: height * 0.07),
                       Text(
                         '-Or Login with-',
                         style: TextStyle(
-                          color: Color(0xffffffff),
+                          color: Color(0xff000000),
                         ),
                       ),
                       SizedBox(height: height * 0.02),
@@ -131,7 +137,7 @@ class LoginPage extends StatelessWidget {
                         child: Container(
                           height: width * 0.1,
                           width: width * 0.1,
-                          color: Colors.white,
+                          color: Color(0xffD9D9D9),
                           child: TextButton(
                             onPressed: () {},
                             child: Image.asset(
@@ -142,14 +148,14 @@ class LoginPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: height * 0.015),
+                      SizedBox(height: height * 0.07),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Do not have an account?',
                             style: TextStyle(
-                              color: Color(0xffffffff),
+                              color: Color(0xff000000),
                             ),
                           ),
                           SizedBox(height: height * 0.01),
@@ -160,23 +166,28 @@ class LoginPage extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   PageRouteBuilder(
-                                    pageBuilder: (context, animation, secondaryAnimation) {
+                                    pageBuilder: (context, animation,
+                                        secondaryAnimation) {
                                       const begin = Offset(0.0, 1.0);
                                       const end = Offset.zero;
                                       const curve = Curves.easeInOut;
 
-                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                                      var offsetAnimation = animation.drive(tween);
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+                                      var offsetAnimation =
+                                          animation.drive(tween);
 
                                       return FadeTransition(
                                         opacity: animation,
                                         child: SlideTransition(
                                           position: offsetAnimation,
-                                          child: RegisterPage(), // Placeholder for SignupPage
+                                          child:
+                                              RegisterPage(), // Placeholder for SignupPage
                                         ),
                                       );
                                     },
-                                    transitionDuration: Duration(milliseconds: 850),
+                                    transitionDuration:
+                                        Duration(milliseconds: 850),
                                   ),
                                 );
                               },
@@ -198,7 +209,8 @@ class LoginPage extends StatelessWidget {
             ),
             // Foreground content
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.1, vertical: height * 0.05),
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.1, vertical: height * 0.05),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,7 +218,7 @@ class LoginPage extends StatelessWidget {
                   Image.asset(
                     'assets/loginpage.png',
                     width: width * 0.7,
-                    height: width * 0.32,
+                    height: width * 0.42,
                   ),
                   Align(
                     alignment: Alignment.topLeft,
