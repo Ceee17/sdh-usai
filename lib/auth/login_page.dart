@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:uas/startingpage/starting_page.dart';
+import 'package:uas/auth/auth_service.dart';
+import 'package:uas/auth/forgot_password_page.dart';
 import 'package:uas/auth/register_page.dart';
+import 'package:uas/startingpage/starting_page.dart';
+import 'package:uas/accountpage/account_page.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _auth = AuthService();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    // super.dispose(); // not needed in StatelessWidget
   }
 
   @override
@@ -82,8 +92,7 @@ class LoginPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Placeholder(), // Placeholder for ForgotPasswordPage
+                                builder: (context) => ForgotPasswordPage(),
                               ),
                             );
                           },
@@ -98,29 +107,53 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: height * 0.012),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => StartingPage()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFFA62F),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: width * 0.25,
-                              vertical: height * 0.01),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => StartingPage()),
+                      //     );
+                      //   },
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: Color(0xFFFFA62F),
+                      //     foregroundColor: Colors.white,
+                      //     padding: EdgeInsets.symmetric(
+                      //         horizontal: width * 0.25,
+                      //         vertical: height * 0.01),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(50),
+                      //     ),
+                      //   ),
+                      //   child: Text(
+                      //     'Login',
+                      //     style: TextStyle(
+                      //       fontSize: width * 0.06,
+                      //       fontWeight: FontWeight.w600,
+                      //     ),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        width: width * 1,
+                        height: height * 0.06,
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: width * 0.06,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: width * 0.06,
-                            fontWeight: FontWeight.w600,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFFFA62F),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.1,
+                                vertical: height * 0.01),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
                           ),
                         ),
                       ),
@@ -240,7 +273,25 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void displayToastMessage(String message, BuildContext context) {
-    Fluttertoast.showToast(msg: message);
+  goToSignup(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const RegisterPage()),
+      );
+
+  goToHome(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                const AccountPage()), // nanti ganti jadi homepage
+      );
+
+  _login() async {
+    final user = await _auth.loginUserWithEmailAndPassword(
+        _emailController.text, _passwordController.text);
+
+    if (user != null) {
+      // log("User Logged In");
+      goToHome(context);
+    }
   }
 }
