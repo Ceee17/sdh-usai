@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "54392670266",
+    "project_id": "junglefeast-17ddc",
+    "storage_bucket": "junglefeast-17ddc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54392670266:android:d7e160b3e3f243c31acd03",
+        "android_client_info": {
+          "package_name": "com.example.uas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54392670266-j9o0tsoh25sb7b5quqfrc56dca22v1c6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.uas",
+            "certificate_hash": "4216f077571bd07475a912fc2bedfa8499cc31bc"
+          }
+        },
+        {
+          "client_id": "54392670266-to32vnloljqt2rdjsm423jqpplcsahu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNVBma7642y_qfZlQYMRxhufMEGeTxRpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54392670266-to32vnloljqt2rdjsm423jqpplcsahu1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "54392670266-shcn8m6ndb3lr67rssmv1a930po3rc79.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.uas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
