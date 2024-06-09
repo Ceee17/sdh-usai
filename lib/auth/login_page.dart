@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _auth = AuthService();
+  bool isLoading = false;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -162,22 +163,32 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.02),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Container(
-                          height: width * 0.1,
-                          width: width * 0.1,
-                          color: Color(0xffD9D9D9),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Image.asset(
-                              'assets/google-icon.png',
-                              width: width * 0.07,
-                              height: width * 0.07,
+                      isLoading
+                          ? const CircularProgressIndicator()
+                          : ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                height: width * 0.1,
+                                width: width * 0.1,
+                                color: Color(0xffD9D9D9),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    await _auth.loginWithGoogle();
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  child: Image.asset(
+                                    'assets/google-icon.png',
+                                    width: width * 0.07,
+                                    height: width * 0.07,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       SizedBox(height: height * 0.07),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -248,20 +259,22 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (context) => const RegisterPage()),
       );
 
-  goToHome(BuildContext context) => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                const AccountPage()), // nanti ganti jadi homepage
-      );
+  //hapus aja
+  // goToHome(BuildContext context) => Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) =>
+  //               const AccountPage()), // nanti ganti jadi homepage
+  //     );
 
   _login() async {
-    final user = await _auth.loginUserWithEmailAndPassword(
+    // final user =  //hapus aja
+    await _auth.loginUserWithEmailAndPassword(
         _emailController.text, _passwordController.text);
-
-    if (user != null) {
-      // log("User Logged In");
-      goToHome(context);
-    }
+    // boleh dihapus
+    // if (user != null) {
+    //   // log("User Logged In");
+    //   goToHome(context);
+    // }
   }
 }

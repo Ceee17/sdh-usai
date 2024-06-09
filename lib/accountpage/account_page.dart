@@ -25,7 +25,7 @@ class AccountPage extends StatelessWidget {
               label: "Sign Out",
               onPressed: () async {
                 await auth.signout();
-                goToLogin(context);
+                // goToLogin(context); //boleh dihapus
               },
             )
           ],
@@ -34,8 +34,9 @@ class AccountPage extends StatelessWidget {
     );
   }
 
-  goToLogin(BuildContext context) => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-      );
+  // boleh dihapus
+  // goToLogin(BuildContext context) => Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => const LoginPage()),
+  //     );
 }

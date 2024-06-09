@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../auth/login_page.dart';
+import 'package:uas/wrapper.dart';
 
 class StartingPage extends StatelessWidget {
-  const StartingPage({Key? key}) : super(key: key);
+  const StartingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class StartingPage extends StatelessWidget {
                   pageBuilder: (context, animation, secondaryAnimation) {
                     return FadeTransition(
                       opacity: animation,
-                      child: LoginPage(),
+                      child: Wrapper(),
                     );
                   },
                 ),
