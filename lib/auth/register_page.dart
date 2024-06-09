@@ -281,11 +281,12 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   _signup() async {
-    final user = await _auth.createUserWithEmailAndPassword(
+    await _auth.createUserWithEmailAndPassword(
         _emailController.text, _passwordController.text);
-    if (user != null) {
-      // log("User Created Succesfully");
-      goToHome(context);
-    }
+    Navigator.pop(context);
+    // if (user != null) {
+    //   // log("User Created Succesfully");
+    //   goToHome(context);
+    // }
   }
 }

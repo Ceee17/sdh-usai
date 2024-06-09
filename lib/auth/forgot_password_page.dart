@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/login_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  const ForgotPasswordPage({Key? key}) : super(key: key);
+  const ForgotPasswordPage({super.key});
 
   @override
   State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final _auth = AuthService();
+
   TextEditingController _emailController = TextEditingController();
 
   @override
@@ -18,37 +21,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.dispose();
   }
 
-  // Future resetPassword() async {
-  //   // showDialog(
-  //   //   context: context,
-  //   //   builder: (context) {
-  //   //     return Center(child: CircularProgressIndicator());
-  //   //   },
-  //   // );
-  //   try {
-  //     await FirebaseAuth.instance
-  //         .sendPasswordResetEmail(email: _emailController.text.trim());
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           content: Text('Password reset link sent! Check your email!'),
-  //         );
-  //       },
-  //     );
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e);
-  //     showDialog(
-  //       context: context,
-  //       builder: (context) {
-  //         return AlertDialog(
-  //           content: Text(e.message.toString()),
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -56,43 +28,42 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final width = size.width;
 
     return Scaffold(
+      // appBar: AppBar(),
       backgroundColor: Color(0xffd9d9d9),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
             // Background text
-            Container(
-              padding: EdgeInsets.all(0.0),
-              child: Center(
-                child: Align(
-                  alignment: Alignment(-0.85, -0.38),
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
             // Foreground container
             Positioned(
-              top: height * 0.15,
+              top: height * 0.0175,
               left: 0,
               right: 0,
-              child: Container(
-                child: Center(
-                  child: Text(
-                    '   Are you ready to\nbecome a Flasher?',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
+              child: Column(
+                children: [
+                  Align(
+                    child: Image.asset(
+                      'assets/forgotpasspage.png',
+                      width: width * 0.7,
+                      height: width * 0.5,
                     ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: width * 0.1, top: height * 0.01),
+                      child: Text(
+                        'Forgot password?',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             // Form container
@@ -101,7 +72,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               left: 0,
               right: 0,
               child: Container(
-                height: height * 0.7, // Adjust height relative to screen size
+                height: height * 0.65, // Adjust height relative to screen size
                 decoration: BoxDecoration(
                   color: Color(0xffffffff),
                   borderRadius: BorderRadius.only(
@@ -139,9 +110,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           labelText: 'example@gmail.com',
                         ),
                       ),
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.035),
+                      InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Text(
+                            "Back to sign in",
+                            style: TextStyle(
+                              color: Color(0xffABABAB),
+                            ),
+                          )),
+                      SizedBox(height: height * 0.05),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await _auth
+                              .sendPasswordResetLink(_emailController.text);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "An email for password reset has been send to your email!")));
+                          Navigator.pop(context);
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFFA62F),
                           foregroundColor: Colors.white,
