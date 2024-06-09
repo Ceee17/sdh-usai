@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/forgot_password_page.dart';
 import 'package:uas/auth/register_page.dart';
+import 'package:uas/homepage/home_page.dart';
 import 'package:uas/startingpage/starting_page.dart';
 import 'package:uas/accountpage/account_page.dart';
 
@@ -135,7 +136,10 @@ class _LoginPageState extends State<LoginPage> {
                         width: width * 1,
                         height: height * 0.06,
                         child: ElevatedButton(
-                          onPressed: _login,
+                          // onPressed: _login,
+                          onPressed: () async {
+                            await _login();
+                          },
                           child: Text(
                             'Login',
                             style: TextStyle(
@@ -267,14 +271,25 @@ class _LoginPageState extends State<LoginPage> {
   //               const AccountPage()), // nanti ganti jadi homepage
   //     );
 
+  // _login() async {
+  //   // final user =  //hapus aja
+  //   await _auth.loginUserWithEmailAndPassword(
+  //       _emailController.text, _passwordController.text);
+  //   // boleh dihapus
+  //   // if (user != null) {
+  //   //   // log("User Logged In");
+  //   //   goToHome(context);
+  //   // }
+  // }
+
   _login() async {
-    // final user =  //hapus aja
-    await _auth.loginUserWithEmailAndPassword(
+    final user = await _auth.loginUserWithEmailAndPassword(
         _emailController.text, _passwordController.text);
-    // boleh dihapus
-    // if (user != null) {
-    //   // log("User Logged In");
-    //   goToHome(context);
-    // }
+    if (user != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    }
   }
 }
