@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uas/accountpage/account_page.dart';
+import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController _fullnameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phonenumberController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final _auth = AuthService();
+
+  final _fullnameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phonenumberController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -184,9 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       SizedBox(height: height * 0.04),
                       ElevatedButton(
-                        onPressed: () {
-                          // Implement your sign up logic here
-                        },
+                        onPressed: _signup,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFFFA62F),
                           foregroundColor: Colors.white,
@@ -271,5 +273,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void displayToastMessage(String message, BuildContext context) {
     Fluttertoast.showToast(msg: message);
+  }
+
+  goToHome(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const AccountPage()),
+      );
+
+  _signup() async {
+    final user = await _auth.createUserWithEmailAndPassword(
+        _emailController.text, _passwordController.text);
+    if (user != null) {
+      // log("User Created Succesfully");
+      goToHome(context);
+    }
   }
 }
