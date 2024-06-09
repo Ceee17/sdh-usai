@@ -35,15 +35,38 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
-        child: Stack(
-          children: [
-            // Background container with rounded corners
-            Positioned(
-              bottom: -20,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: height * 0.7, // Adjust height relative to screen size
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.1, vertical: height * 0.05),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/loginpage.png',
+                      width: width * 0.7,
+                      height: width * 0.42,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Login to your ..',
+                        style: TextStyle(
+                          fontSize: width * 0.06,
+                          fontWeight: FontWeight.w900,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: height * 0.7,
                 decoration: BoxDecoration(
                   color: Color(0xffD9D9D9),
                   borderRadius: BorderRadius.only(
@@ -107,32 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.012),
-                      // ElevatedButton(
-                      //   onPressed: () {
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => StartingPage()),
-                      //     );
-                      //   },
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: Color(0xFFFFA62F),
-                      //     foregroundColor: Colors.white,
-                      //     padding: EdgeInsets.symmetric(
-                      //         horizontal: width * 0.25,
-                      //         vertical: height * 0.01),
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(50),
-                      //     ),
-                      //   ),
-                      //   child: Text(
-                      //     'Login',
-                      //     style: TextStyle(
-                      //       fontSize: width * 0.06,
-                      //       fontWeight: FontWeight.w600,
-                      //     ),
-                      //   ),
-                      // ),
                       SizedBox(
                         width: width * 1,
                         height: height * 0.06,
@@ -239,35 +236,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-            ),
-            // Foreground content
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.1, vertical: height * 0.05),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/loginpage.png',
-                    width: width * 0.7,
-                    height: width * 0.42,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Login to your ..',
-                      style: TextStyle(
-                        fontSize: width * 0.06,
-                        fontWeight: FontWeight.w900,
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
