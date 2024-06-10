@@ -4,17 +4,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/forgot_password_page.dart';
 import 'package:uas/auth/register_page.dart';
-<<<<<<< HEAD
 import 'package:uas/startingpage/starting_page.dart';
 import 'package:uas/accountpage/account_page.dart';
-// import 'package:uas/historypage/history_page.dart';
-
-// import 'package:uas/orderfoodpage/choose_zone_page.dart';
-import 'package:uas/orderfoodpage/fauna_zone_page.dart';
-=======
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/wrapper.dart';
->>>>>>> 1ff09d1b7a58707eddb1e9610b27a021f7d6e580
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -145,7 +138,6 @@ class _LoginPageState extends State<LoginPage> {
                         width: width * 1,
                         height: height * 0.06,
                         child: ElevatedButton(
-                          // onPressed: _login,
                           onPressed: () => _login(),
                           child: Text(
                             'Login',
@@ -285,19 +277,6 @@ class _LoginPageState extends State<LoginPage> {
         MaterialPageRoute(builder: (context) => const RegisterPage()),
       );
 
-  //hapus aja
-  // goToHome(BuildContext context) => Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) =>
-  //               const AccountPage()), // nanti ganti jadi homepage
-  //     );
-
-  // _login() async {
-  //   await _auth.loginUserWithEmailAndPassword(
-  //       _emailController.text, _passwordController.text);
-  // }
-
   _login() async {
     setState(() {
       isLoading = true;
@@ -333,15 +312,4 @@ class _LoginPageState extends State<LoginPage> {
       });
     }
   }
-
-  // _login() async {
-  //   final user = await _auth.loginUserWithEmailAndPassword(
-  //       _emailController.text, _passwordController.text);
-  //   if (user != null) {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => const HomePage()),
-  //     );
-  //   }
-  // }
 }
