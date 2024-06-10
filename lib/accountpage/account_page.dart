@@ -80,7 +80,8 @@ class AccountPage extends StatelessWidget {
                       style: TextStyle(color: Colors.orange),
                     ),
                     onTap: () async {
-                      await auth.signout();
+                      await _auth.signout();
+                      _navigateToLoginPage(context);
                     },
                   ),
                 ],
@@ -91,6 +92,14 @@ class AccountPage extends StatelessWidget {
       ),
     );
   }
+
+  void _navigateToLoginPage(BuildContext context) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+      (route) => false,
+    );
+  }
 }
 
 void _navigateToEditProfilePage(BuildContext context) {
@@ -99,4 +108,3 @@ void _navigateToEditProfilePage(BuildContext context) {
     MaterialPageRoute(builder: (context) => EditProfilePage()),
   );
 }
-

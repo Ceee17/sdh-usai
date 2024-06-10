@@ -20,7 +20,6 @@ class AuthService {
     try {
       // final googleUser = await GoogleSignIn().signIn();
       final googleUser = await _googleSignIn.signIn();
-
       final googleAuth = await googleUser?.authentication;
 
       final cred = GoogleAuthProvider.credential(
@@ -66,7 +65,7 @@ class AuthService {
   Future<void> signout() async {
     try {
       await _auth.signOut();
-      // await _googleSignIn.signOut(); // Clear Google sign-in session
+      await _googleSignIn.signOut(); // Clear Google sign-in session
     } catch (e) {
       log("Something went wrong");
     }
