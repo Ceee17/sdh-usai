@@ -10,7 +10,7 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = AuthService();
+    final _auth = AuthService();
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
@@ -100,40 +100,3 @@ void _navigateToEditProfilePage(BuildContext context) {
   );
 }
 
-
-// class AccountPage extends StatelessWidget {
-//   const AccountPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final auth = AuthService();
-//     return Scaffold(
-//       body: Align(
-//         alignment: Alignment.center,
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             const Text(
-//               "Welcome User",
-//               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-//             ),
-//             const SizedBox(height: 20),
-//             CustomButton(
-//               label: "Sign Out",
-              // onPressed: () async {
-              //   await auth.signout();
-              //   // goToLogin(context); //boleh dihapus
-              // },
-//             )
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-
-//   // boleh dihapus
-//   // goToLogin(BuildContext context) => Navigator.push(
-//   //       context,
-//   //       MaterialPageRoute(builder: (context) => const LoginPage()),
-//   //     );
-// }

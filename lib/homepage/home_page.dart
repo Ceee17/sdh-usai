@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uas/accountpage/account_page.dart';
 
 Color primaryColor = Color(0xFFFFA62F);
 
@@ -16,6 +17,30 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
+
+    switch (index) {
+      case 0:
+        // Home - No need to navigate, already in HomePage
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Placeholder()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Placeholder()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AccountPage()),
+        );
+        break;
+    }
   }
 
   @override
