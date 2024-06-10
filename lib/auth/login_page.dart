@@ -1,14 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/forgot_password_page.dart';
 import 'package:uas/auth/register_page.dart';
+<<<<<<< HEAD
 import 'package:uas/startingpage/starting_page.dart';
 import 'package:uas/accountpage/account_page.dart';
 // import 'package:uas/historypage/history_page.dart';
 
 // import 'package:uas/orderfoodpage/choose_zone_page.dart';
 import 'package:uas/orderfoodpage/fauna_zone_page.dart';
+=======
+import 'package:uas/homepage/home_page.dart';
+import 'package:uas/wrapper.dart';
+>>>>>>> 1ff09d1b7a58707eddb1e9610b27a021f7d6e580
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -140,9 +146,13 @@ class _LoginPageState extends State<LoginPage> {
                         height: height * 0.06,
                         child: ElevatedButton(
                           // onPressed: _login,
+<<<<<<< HEAD
                           onPressed: () async {
                             await _login();
                           },
+=======
+                          onPressed: () => _login(),
+>>>>>>> 1ff09d1b7a58707eddb1e9610b27a021f7d6e580
                           child: Text(
                             'Login',
                             style: TextStyle(
@@ -183,10 +193,25 @@ class _LoginPageState extends State<LoginPage> {
                                     setState(() {
                                       isLoading = true;
                                     });
-                                    await _auth.loginWithGoogle();
+                                    UserCredential? userCredential =
+                                        await _auth.loginWithGoogle();
                                     setState(() {
                                       isLoading = false;
                                     });
+                                    if (userCredential != null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const Wrapper(),
+                                        ),
+                                      );
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "Google Sign-In failed.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                      );
+                                    }
                                   },
                                   child: Image.asset(
                                     'assets/google-icon.png',
@@ -275,24 +300,54 @@ class _LoginPageState extends State<LoginPage> {
   //     );
 
   // _login() async {
-  //   // final user =  //hapus aja
   //   await _auth.loginUserWithEmailAndPassword(
   //       _emailController.text, _passwordController.text);
-  //   // boleh dihapus
-  //   // if (user != null) {
-  //   //   // log("User Logged In");
-  //   //   goToHome(context);
-  //   // }
   // }
 
   _login() async {
-    final user = await _auth.loginUserWithEmailAndPassword(
-        _emailController.text, _passwordController.text);
-    if (user != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const FaunaLandZoneScreen()),
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      User? user = await _auth.loginUserWithEmailAndPassword(
+        _emailController.text,
+        _passwordController.text,
       );
+
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const Wrapper()),
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: "Login failed. Please check your credentials.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+        );
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: e.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
+
+  // _login() async {
+  //   final user = await _auth.loginUserWithEmailAndPassword(
+  //       _emailController.text, _passwordController.text);
+  //   if (user != null) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => const HomePage()),
+  //     );
+  //   }
+  // }
 }

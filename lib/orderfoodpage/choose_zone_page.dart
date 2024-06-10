@@ -12,6 +12,12 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           "Choose Zone",
           style: TextStyle(
