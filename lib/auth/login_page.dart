@@ -146,13 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: height * 0.06,
                         child: ElevatedButton(
                           // onPressed: _login,
-<<<<<<< HEAD
-                          onPressed: () async {
-                            await _login();
-                          },
-=======
                           onPressed: () => _login(),
->>>>>>> 1ff09d1b7a58707eddb1e9610b27a021f7d6e580
                           child: Text(
                             'Login',
                             style: TextStyle(
