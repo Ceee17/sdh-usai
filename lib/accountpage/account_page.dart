@@ -9,7 +9,7 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = AuthService();
+    final _auth = AuthService();
     return Scaffold(
       body: Align(
         alignment: Alignment.center,
@@ -24,7 +24,7 @@ class AccountPage extends StatelessWidget {
             CustomButton(
               label: "Sign Out",
               onPressed: () async {
-                await auth.signout();
+                await _auth.signout();
                 // goToLogin(context); //boleh dihapus
               },
             )
@@ -35,8 +35,8 @@ class AccountPage extends StatelessWidget {
   }
 
   // boleh dihapus
-  // goToLogin(BuildContext context) => Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => const LoginPage()),
-  //     );
+  goToLogin(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
 }

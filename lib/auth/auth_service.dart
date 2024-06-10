@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -65,7 +66,7 @@ class AuthService {
   Future<void> signout() async {
     try {
       await _auth.signOut();
-      await _googleSignIn.signOut(); // Clear Google sign-in session
+      // await _googleSignIn.signOut(); // Clear Google sign-in session
     } catch (e) {
       log("Something went wrong");
     }

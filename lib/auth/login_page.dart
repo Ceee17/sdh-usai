@@ -137,9 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: height * 0.06,
                         child: ElevatedButton(
                           // onPressed: _login,
-                          onPressed: () async {
-                            await _login();
-                          },
+                          onPressed: () => _login(),
                           child: Text(
                             'Login',
                             style: TextStyle(
@@ -271,25 +269,25 @@ class _LoginPageState extends State<LoginPage> {
   //               const AccountPage()), // nanti ganti jadi homepage
   //     );
 
-  // _login() async {
-  //   // final user =  //hapus aja
-  //   await _auth.loginUserWithEmailAndPassword(
-  //       _emailController.text, _passwordController.text);
-  //   // boleh dihapus
-  //   // if (user != null) {
-  //   //   // log("User Logged In");
-  //   //   goToHome(context);
-  //   // }
-  // }
-
   _login() async {
-    final user = await _auth.loginUserWithEmailAndPassword(
+    //   // final user =  //hapus aja
+    await _auth.loginUserWithEmailAndPassword(
         _emailController.text, _passwordController.text);
-    if (user != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    }
+    //   // boleh dihapus
+    //   // if (user != null) {
+    //   //   // log("User Logged In");
+    //   //   goToHome(context);
+    //   // }
   }
+
+  // _login() async {
+  //   final user = await _auth.loginUserWithEmailAndPassword(
+  //       _emailController.text, _passwordController.text);
+  //   if (user != null) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => const HomePage()),
+  //     );
+  //   }
+  // }
 }

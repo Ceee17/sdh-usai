@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uas/startingpage/starting_page.dart';
+import 'package:uas/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:uas/firebase_options.dart';
 
@@ -10,18 +12,26 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
+
+  runApp(MyApp(isFirstLaunch: isFirstLaunch));
 }
 
 class MyApp extends StatelessWidget {
+  final bool isFirstLaunch;
+
+  const MyApp({required this.isFirstLaunch});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'JungleFeast',
-        theme: ThemeData(
-            // primarySwatch: Colors.blue,
-            ),
-        debugShowCheckedModeBanner: false,
-        home: const StartingPage());
+      title: 'JungleFeast',
+      theme: ThemeData(
+          // primarySwatch: Colors.blue,
+          ),
+      debugShowCheckedModeBanner: false,
+      home: isFirstLaunch ? StartingPage() : Wrapper(),
+    );
   }
 }
