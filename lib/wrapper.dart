@@ -25,6 +25,7 @@ class Wrapper extends StatelessWidget {
           if (snapshot.data == null) {
             return const LoginPage();
           } else {
+            print('routing to homepage...');
             return const HomePage(); // nanti ganti jadi homepage
           }
         }
