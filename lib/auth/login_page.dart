@@ -4,8 +4,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/forgot_password_page.dart';
 import 'package:uas/auth/register_page.dart';
+<<<<<<< HEAD
+import 'package:uas/startingpage/starting_page.dart';
+import 'package:uas/accountpage/account_page.dart';
+// import 'package:uas/historypage/history_page.dart';
+
+// import 'package:uas/orderfoodpage/choose_zone_page.dart';
+import 'package:uas/orderfoodpage/fauna_zone_page.dart';
+=======
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/wrapper.dart';
+>>>>>>> 1ff09d1b7a58707eddb1e9610b27a021f7d6e580
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
