@@ -1,18 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uas/auth/auth_service.dart';
 
 Color primaryColor = Color(0xFFFFA62F);
 
-class EditProfilePage extends StatelessWidget {
-  final TextEditingController fullNameController =
-      TextEditingController(text: 'Nelson Carloss');
-  final TextEditingController emailController =
-      TextEditingController(text: 'examplemail@example.com');
-  final TextEditingController phoneController =
-      TextEditingController(text: '081234567890');
-  final TextEditingController usernameController =
-      TextEditingController(text: 'Ne1L');
-  final TextEditingController passwordController =
-      TextEditingController(text: '12345678');
+class EditProfilePage extends StatefulWidget {
+  @override
+  _EditProfilePageState createState() => _EditProfilePageState();
+}
+
+class _EditProfilePageState extends State<EditProfilePage> {
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  User? currentUser = FirebaseAuth.instance.currentUser;
+  final _auth = AuthService();
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    if (currentUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser!.uid)
+          .get();
+      if (userDoc.exists) {
+        setState(() {
+          fullNameController.text = userDoc['fullName'];
+          emailController.text = userDoc['email'];
+          phoneController.text = userDoc['phoneNumber'];
+          usernameController.text = userDoc['username'];
+          // For security reasons, you shouldn't fetch the password directly like this.
+          // passwordController.text = userDoc['password'];
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +109,35 @@ class EditProfilePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Update profile action
+              onPressed: () async {
+                // Validation
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text('Email and Password must be filled')),
+                  );
+                  return;
+                }
+
+                try {
+                  await _auth.updateUserProfile(
+                    fullNameController.text,
+                    emailController.text,
+                    phoneController.text,
+                    usernameController.text,
+                    passwordController.text,
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Profile updated successfully')),
+                  );
+                  Navigator.pop(context, true);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error updating profile: $e')),
+                  );
+                }
               },
               child: Text('Update'),
               style: ElevatedButton.styleFrom(
