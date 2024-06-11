@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/accountpage/account_page.dart';
@@ -281,12 +283,39 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   _signup() async {
-    await _auth.createUserWithEmailAndPassword(
-        _emailController.text, _passwordController.text);
-    Navigator.pop(context);
-    // if (user != null) {
-    //   // log("User Created Succesfully");
-    //   goToHome(context);
-    // }
+    final String fullName = _fullnameController.text;
+    final String email = _emailController.text;
+    final String phoneNumber = _phonenumberController.text;
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+
+    try {
+      User? user = await _auth.createUserWithEmailAndPassword(email, password);
+
+      if (user != null) {
+        // Save additional user data in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'fullName': fullName,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'username': username,
+          'creationTime': user.metadata.creationTime?.toIso8601String(),
+          'lastSignInTime': user.metadata.lastSignInTime?.toIso8601String(),
+        });
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      print('Error: $e');
+      displayToastMessage("Error: $e", context);
+    }
   }
+  // _signup() async {
+  //   await _auth.createUserWithEmailAndPassword(
+  //       _emailController.text, _passwordController.text);
+  //   Navigator.pop(context);
+  //   // if (user != null) {
+  //   //   // log("User Created Succesfully");
+  //   //   goToHome(context);
+  //   // }
+  // }
 }
