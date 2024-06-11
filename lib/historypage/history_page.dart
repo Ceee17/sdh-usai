@@ -8,8 +8,60 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
+  String selectedCategory = 'All';
+
+  final List<Map<String, String>> historyItems = [
+    {
+      'imageUrl': 'https://via.placeholder.com/150',
+      'title': 'Noodle Ex',
+      'date': '23 August 2021, 15:32',
+      'category': 'Food',
+    },
+    {
+      'imageUrl': 'https://via.placeholder.com/150',
+      'title': 'Noodle Ex',
+      'date': '23 August 2021, 15:32',
+      'category': 'Food',
+    },
+    {
+      'imageUrl': 'https://via.placeholder.com/150',
+      'title': 'Fauna Land',
+      'date': '23 August 2021, 15:32',
+      'category': 'Ticket',
+    },
+    {
+      'imageUrl': 'https://via.placeholder.com/150',
+      'title': 'Sea World',
+      'date': '23 August 2021, 15:32',
+      'category': 'Ticket',
+    },
+  ];
+
+  Widget buildChoiceChip(String label) {
+    return ChoiceChip(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(90),
+      ),
+      label: Text(label),
+      selected: selectedCategory == label,
+      onSelected: (bool selected) {
+        setState(() {
+          selectedCategory = label;
+        });
+      },
+      selectedColor: Colors.orange,
+      showCheckmark: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> filteredItems = selectedCategory == 'All'
+        ? historyItems
+        : historyItems
+            .where((item) => item['category'] == selectedCategory)
+            .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -32,57 +84,24 @@ class _HistoryPageState extends State<HistoryPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  ChoiceChip(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(90)),
-                    label: Text("All"),
-                    selected: true,
-                    onSelected: (bool selected) {},
-                    selectedColor: Colors.orange,
-                  ),
+                  buildChoiceChip('All'),
                   SizedBox(width: 10),
-                  ChoiceChip(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(90)),
-                    label: Text("Ticket"),
-                    selected: false,
-                    onSelected: (bool selected) {},
-                  ),
+                  buildChoiceChip('Ticket'),
                   SizedBox(width: 10),
-                  ChoiceChip(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(90)),
-                    label: Text("Food"),
-                    selected: false,
-                    onSelected: (bool selected) {},
-                  ),
+                  buildChoiceChip('Food'),
                 ],
               ),
               SizedBox(height: 16),
               Expanded(
                 child: ListView(
-                  children: [
-                    HistoryItem(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Noodle Ex',
-                      date: '23 August 2021, 15:32',
-                    ),
-                    HistoryItem(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Noodle Ex',
-                      date: '23 August 2021, 15:32',
-                    ),
-                    HistoryItem(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Fauna Land',
-                      date: '23 August 2021, 15:32',
-                    ),
-                    HistoryItem(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Sea World',
-                      date: '23 August 2021, 15:32',
-                    ),
-                  ],
+                  children: filteredItems.map((item) {
+                    return HistoryItem(
+                      imageUrl: item['imageUrl']!,
+                      title: item['title']!,
+                      date: item['date']!,
+                      category: item['category']!,
+                    );
+                  }).toList(),
                 ),
               ),
             ],
@@ -97,9 +116,14 @@ class HistoryItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String date;
+  final String category;
 
-  HistoryItem(
-      {required this.imageUrl, required this.title, required this.date});
+  HistoryItem({
+    required this.imageUrl,
+    required this.title,
+    required this.date,
+    required this.category,
+  });
 
   @override
   Widget build(BuildContext context) {

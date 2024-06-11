@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:uas/accountpage/account_page.dart';
+import 'package:uas/historypage/history_page.dart';
+import 'package:uas/orderfoodpage/choose_zone_page.dart';
 
 Color primaryColor = Color(0xFFFFA62F);
 
@@ -16,6 +19,31 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _selectedIndex = index;
     });
+
+    switch (index) {
+      case 0:
+        // Home - No need to navigate, already in HomePage
+        break;
+      case 1:
+        // kemungkinan nanti bakal diganti jadi pushReplacement biargabisa di back
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Placeholder()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HistoryPage()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AccountPage()),
+        );
+        break;
+    }
   }
 
   @override
@@ -51,11 +79,20 @@ class _HomePageState extends State<HomePage> {
                 OrderButton(
                   image: AssetImage('assets/ticket.png'),
                   label: 'Ticket',
+                  onPressed: () => Placeholder(),
                 ),
                 SizedBox(width: 16),
                 OrderButton(
                   icon: Icons.restaurant,
                   label: 'Food',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ChooseZonePage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -140,12 +177,14 @@ class OrderButton extends StatelessWidget {
   final IconData? icon;
   final String label;
   final ImageProvider? image;
+  final VoidCallback? onPressed;
 
   const OrderButton({
     Key? key,
     this.icon,
     required this.label,
     this.image,
+    this.onPressed,
   }) : super(key: key);
 
   @override
@@ -153,59 +192,62 @@ class OrderButton extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-            16), // Sesuaikan radius untuk kelengkungan yang diinginkan
+            16), // Adjust the radius for the desired curvature
       ),
-      elevation: 1, // Sesuaikan elevasi untuk efek bayangan yang diinginkan
-      color: Colors.white, // Sesuaikan warna untuk latar belakang tombol
-      child: Padding(
-        padding: const EdgeInsets.all(
-            8), // Sesuaikan padding untuk spasi di dalam tombol
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (image != null)
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(
-                        0xFFFFA62F), // atau warna abu-abu lain yang Anda sukai
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsets.all(25), // Atur padding sesuai kebutuhan
-                    child: FittedBox(
-                      child: Image(
-                        image: image!,
+      elevation: 1, // Adjust the elevation for the desired shadow effect
+      color: Colors.white, // Adjust the color for the button background
+      child: InkWell(
+        onTap: onPressed, // Set the onTap callback for the InkWell
+        child: Padding(
+          padding: const EdgeInsets.all(
+              8), // Adjust the padding for the space inside the button
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (image != null)
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Color(
+                          0xFFFFA62F), // or any other grey color you prefer
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsets.all(25), // Adjust the padding as needed
+                      child: FittedBox(
+                        child: Image(
+                          image: image!,
+                        ),
+                        fit: BoxFit
+                            .fill, // this will ensure the image fills the entire space
                       ),
-                      fit: BoxFit
-                          .fill, // ini akan memastikan gambar mengisi seluruh ruang
                     ),
                   ),
                 ),
-              ),
-            if (icon != null)
-              SizedBox(
-                width: 100,
-                height: 100,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: primaryColor, // or any other grey color you prefer
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 50,
+              if (icon != null)
+                SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: primaryColor, // or any other grey color you prefer
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
+                    child: Icon(
+                      icon,
+                      size: 50,
+                    ),
                   ),
                 ),
-              ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Text(label),
-            )
-          ],
+              Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Text(label),
+              )
+            ],
+          ),
         ),
       ),
     );

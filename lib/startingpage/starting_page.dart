@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:uas/wrapper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uas/auth/login_page.dart';
 
 class StartingPage extends StatelessWidget {
   const StartingPage({super.key});
+
+  Future<void> _completeInitialSetup(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstLaunch', false);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Wrapper()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,19 +65,7 @@ class StartingPage extends StatelessWidget {
           ),
           SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 850),
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: Wrapper(),
-                    );
-                  },
-                ),
-              );
-            },
+            onPressed: () => _completeInitialSetup(context),
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFFA62F),
               foregroundColor: Colors.white,

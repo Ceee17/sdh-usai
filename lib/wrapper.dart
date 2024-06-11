@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uas/accountpage/account_page.dart';
+import 'package:uas/homepage/home_page.dart';
 import 'package:uas/auth/login_page.dart';
+import 'package:uas/startingpage/starting_page.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
@@ -18,13 +19,14 @@ class Wrapper extends StatelessWidget {
           );
         } else if (snapshot.hasError) {
           return Center(
-            child: Text("Error"),
+            child: Text("Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"),
           );
         } else {
           if (snapshot.data == null) {
             return const LoginPage();
           } else {
-            return const AccountPage(); // nanti ganti jadi homepage
+            print('routing to homepage...');
+            return const HomePage(); // nanti ganti jadi homepage
           }
         }
       },
