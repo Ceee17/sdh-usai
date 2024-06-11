@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uas/aboutus/about_us_page.dart';
+import 'package:uas/auth/login_page.dart';
 import 'package:uas/startingpage/starting_page.dart';
 import 'package:uas/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
           // primarySwatch: Colors.blue,
           ),
       debugShowCheckedModeBanner: false,
-      home: isFirstLaunch ? StartingPage() : Wrapper(),
+      home: isFirstLaunch ? LoginPage() : Wrapper(),
     );
   }
 }
