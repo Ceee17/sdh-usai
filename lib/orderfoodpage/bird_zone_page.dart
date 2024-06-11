@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/orderfoodpage/choose_zone_page.dart';
 
-class FaunaZoneScreen extends StatefulWidget {
-  const FaunaZoneScreen({super.key});
+class BirdZoneScreen extends StatefulWidget {
+  const BirdZoneScreen({super.key});
 
   @override
-  State<FaunaZoneScreen> createState() => _FaunaZoneScreenState();
+  State<BirdZoneScreen> createState() => _BirdZoneScreenState();
 }
 
-class _FaunaZoneScreenState extends State<FaunaZoneScreen> {
+class _BirdZoneScreenState extends State<BirdZoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Jungle Expedition',
+          'Sky Sanctuary',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -279,31 +279,31 @@ class ItemCard extends StatelessWidget {
 final List<Item> items = [
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Jungle Jambalaya',
-    price: 'Rp. 75,000,00',
-    description:
-        'A hearty dish of rice, chicken, sausage, and shrimp, spiced with a blend of Creole seasonings.',
-  ),
-  Item(
-    image: 'https://via.placeholder.com/150',
-    title: 'Wildlife Wrap',
+    title: 'Avian Avocado Toast',
     price: 'Rp. 45,000,00',
     description:
-        'A whole wheat wrap filled with grilled chicken, avocado, lettuce, and a creamy herb dressing.',
+        'Toasted sourdough bread topped with smashed avocado, cherry tomatoes, and poached eggs.',
   ),
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Savannah Salad',
-    price: 'Rp. 50,000,00',
+    title: 'Feathered Tacos',
+    price: 'Rp. 30,000,00',
     description:
-        'A mix of fresh greens, cherry tomatoes, cucumbers, and feta cheese, served with a light vinaigrette.',
+        'Soft corn tortillas filled with grilled chicken, pico de gallo, lettuce, and avocado cream.',
   ),
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Safari Smoothie',
-    price: 'Rp. 35,000,00',
+    title: "Bird's Nest Pasta",
+    price: 'Rp. 75,000,00',
     description:
-        'A refreshing blend of mango, pineapple, banana, and coconut milk.',
+        'Spaghetti with a light pesto sauce, cherry tomatoes, and grilled chicken.',
+  ),
+  Item(
+    image: 'https://via.placeholder.com/150',
+    title: 'Parrot Parfait',
+    price: 'Rp. 45,000,00',
+    description:
+        'Layers of Greek yogurt, granola, and mixed berries, topped with a drizzle of honey.',
   ),
   // Add more items here
 ];
