@@ -1,7 +1,7 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -29,16 +29,29 @@ class AuthService {
 
       return await _auth.signInWithCredential(cred);
     } catch (e) {
-      print(e.toString());
+      log(e.toString());
     }
     return null;
   }
+
+  // Future<void> createUserDocument(User user) async {
+  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  //   await firestore.collection('users').doc(user.uid).set({
+  //     'email': user.email,
+  //     'displayName': user.displayName,
+  //     'phoneNumber': user.phoneNumber,
+  //     'creationTime': user.metadata.creationTime?.toIso8601String(),
+  //     'lastSignInTime': user.metadata.lastSignInTime?.toIso8601String(),
+  //   });
+  // }
 
   Future<User?> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
       final cred = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+
       return cred.user;
     } on FirebaseAuthException catch (e) {
       exceptionHandler(e.code);
@@ -60,6 +73,56 @@ class AuthService {
       log("Something went wrong");
     }
     return null;
+  }
+
+  Future<void> updateUserProfile(String fullName, String email,
+      String phoneNumber, String username, String password) async {
+    try {
+      User? user = _auth.currentUser;
+
+      if (user != null) {
+        // Update user profile information in Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({
+          'fullName': fullName,
+          'email': email,
+          'phoneNumber': phoneNumber,
+          'username': username,
+        });
+
+        // Update email with verification
+        await user.verifyBeforeUpdateEmail(email);
+
+        // Update password
+        await user.updatePassword(password);
+
+        log('User profile updated successfully');
+      }
+    } catch (e) {
+      log('Error updating profile: $e');
+    }
+  }
+
+  Future<void> updatePassword(String password) async {
+    try {
+      User? user = _auth.currentUser;
+      await user?.updatePassword(password);
+    } catch (e) {
+      log("Failed to update password: $e");
+    }
+  }
+
+  Future<void> reauthenticate(String email, String password) async {
+    try {
+      User? user = _auth.currentUser;
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: password);
+      await user?.reauthenticateWithCredential(credential);
+    } catch (e) {
+      log("Reauthentication failed: $e");
+    }
   }
 
   Future<void> signout() async {

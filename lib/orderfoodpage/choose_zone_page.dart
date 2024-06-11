@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uas/orderfoodpage/bird_zone_page.dart';
+import 'package:uas/orderfoodpage/fauna_zone_page.dart';
+import 'package:uas/orderfoodpage/forest_zone_page.dart';
+import 'package:uas/orderfoodpage/sea_zone_page.dart';
 
 class ChooseZonePage extends StatefulWidget {
   const ChooseZonePage({super.key});
@@ -81,35 +85,81 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
                   crossAxisSpacing: 16.0,
                   mainAxisSpacing: 16.0,
                   children: [
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Fauna Land',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FaunaZoneScreen(),
+                          ),
+                        );
+                      },
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Jungle Expedition',
+                        description: 'Short Description',
+                      ),
                     ),
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Sea World',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SeaZoneScreen(),
+                          ),
+                        );
+                      },
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Underwater Paradise',
+                        description: 'Short Description',
+                      ),
                     ),
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Bird Land',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const BirdZoneScreen(),
+                          ),
+                        );
+                      },
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Sky Sanctuary',
+                        description: 'Short Description',
+                      ),
                     ),
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Jungle Land',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ForestZoneScreen(),
+                          ),
+                        );
+                      },
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Spooky Forest',
+                        description: 'Short Description',
+                      ),
                     ),
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Coming Soon!',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {},
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Coming Soon!',
+                        description: 'Short Description',
+                      ),
                     ),
-                    ZoneCard(
-                      imageUrl: 'https://via.placeholder.com/150',
-                      title: 'Coming Soon!',
-                      description: 'Short Description',
+                    GestureDetector(
+                      onTap: () {},
+                      child: ZoneCard(
+                        imageUrl: 'https://via.placeholder.com/150',
+                        title: 'Coming Soon!',
+                        description: 'Short Description',
+                      ),
                     ),
                   ],
                 ),
@@ -165,14 +215,14 @@ class ZoneCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Icon(
-                  Icons.favorite,
-                  color: Colors.orange,
-                ),
-              ),
+              // Positioned(
+              //   top: 8,
+              //   right: 8,
+              //   child: Icon(
+              //     Icons.favorite,
+              //     color: Colors.orange,
+              //   ),
+              // ),
             ],
           ),
           Padding(
