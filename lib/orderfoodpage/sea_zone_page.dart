@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/orderfoodpage/choose_zone_page.dart';
 
-class FaunaZoneScreen extends StatefulWidget {
-  const FaunaZoneScreen({super.key});
+class SeaZoneScreen extends StatefulWidget {
+  const SeaZoneScreen({super.key});
 
   @override
-  State<FaunaZoneScreen> createState() => _FaunaZoneScreenState();
+  State<SeaZoneScreen> createState() => _SeaZoneScreenState();
 }
 
-class _FaunaZoneScreenState extends State<FaunaZoneScreen> {
+class _SeaZoneScreenState extends State<SeaZoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Jungle Expedition',
+          'Underwater Paradise',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -279,31 +279,31 @@ class ItemCard extends StatelessWidget {
 final List<Item> items = [
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Jungle Jambalaya',
-    price: 'Rp. 75,000,00',
-    description:
-        'A hearty dish of rice, chicken, sausage, and shrimp, spiced with a blend of Creole seasonings.',
-  ),
-  Item(
-    image: 'https://via.placeholder.com/150',
-    title: 'Wildlife Wrap',
-    price: 'Rp. 45,000,00',
-    description:
-        'A whole wheat wrap filled with grilled chicken, avocado, lettuce, and a creamy herb dressing.',
-  ),
-  Item(
-    image: 'https://via.placeholder.com/150',
-    title: 'Savannah Salad',
+    title: 'Ocean Breeze Salad',
     price: 'Rp. 50,000,00',
     description:
-        'A mix of fresh greens, cherry tomatoes, cucumbers, and feta cheese, served with a light vinaigrette.',
+        'Mixed greens topped with seared tuna, avocado, cucumber, and sesame dressing.',
   ),
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Safari Smoothie',
-    price: 'Rp. 35,000,00',
+    title: 'Seafood Paella',
+    price: 'Rp. 72,000,00',
     description:
-        'A refreshing blend of mango, pineapple, banana, and coconut milk.',
+        'A traditional Spanish dish with saffron-infused rice, mussels, shrimp, calamari, and chorizo.',
+  ),
+  Item(
+    image: 'https://via.placeholder.com/150',
+    title: 'Salmon Sandwich',
+    price: 'Rp. 85,000,00',
+    description:
+        'Grilled salmon filet with arugula, red onion, and a dill yogurt sauce on a toasted bun.',
+  ),
+  Item(
+    image: 'https://via.placeholder.com/150',
+    title: 'Tropical Fruit Bowl',
+    price: 'Rp. 45,000,00',
+    description:
+        'A mix of fresh tropical fruits like pineapple, mango, and kiwi, served with a drizzle of honey.',
   ),
   // Add more items here
 ];

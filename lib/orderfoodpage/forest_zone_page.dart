@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/orderfoodpage/choose_zone_page.dart';
 
-class FaunaZoneScreen extends StatefulWidget {
-  const FaunaZoneScreen({super.key});
+class ForestZoneScreen extends StatefulWidget {
+  const ForestZoneScreen({super.key});
 
   @override
-  State<FaunaZoneScreen> createState() => _FaunaZoneScreenState();
+  State<ForestZoneScreen> createState() => _ForestZoneScreenState();
 }
 
-class _FaunaZoneScreenState extends State<FaunaZoneScreen> {
+class _ForestZoneScreenState extends State<ForestZoneScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Jungle Expedition',
+          'Spooky Forest',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -279,31 +279,30 @@ class ItemCard extends StatelessWidget {
 final List<Item> items = [
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Jungle Jambalaya',
-    price: 'Rp. 75,000,00',
-    description:
-        'A hearty dish of rice, chicken, sausage, and shrimp, spiced with a blend of Creole seasonings.',
-  ),
-  Item(
-    image: 'https://via.placeholder.com/150',
-    title: 'Wildlife Wrap',
+    title: "Witch's Brew Soup",
     price: 'Rp. 45,000,00',
     description:
-        'A whole wheat wrap filled with grilled chicken, avocado, lettuce, and a creamy herb dressing.',
+        'A hearty pumpkin and butternut squash soup, served with a side of crusty bread.',
   ),
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Savannah Salad',
-    price: 'Rp. 50,000,00',
+    title: 'Ghostly Shrimp',
+    price: 'Rp. 60,000,00',
     description:
-        'A mix of fresh greens, cherry tomatoes, cucumbers, and feta cheese, served with a light vinaigrette.',
+        'Sautéed shrimp in a garlic and butter sauce, served over a bed of wild rice.',
   ),
   Item(
     image: 'https://via.placeholder.com/150',
-    title: 'Safari Smoothie',
+    title: 'Mystical Mushroom Risotto',
+    price: 'Rp. 55,000,00',
+    description: 'Creamy risotto with a mix of wild mushrooms and truffle oil.',
+  ),
+  Item(
+    image: 'https://via.placeholder.com/150',
+    title: 'Haunted House Brownies',
     price: 'Rp. 35,000,00',
     description:
-        'A refreshing blend of mango, pineapple, banana, and coconut milk.',
+        'Rich chocolate brownies with a spooky twist, topped with ghost-shaped marshmallows.',
   ),
   // Add more items here
 ];
