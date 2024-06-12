@@ -158,14 +158,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: height * 0.07),
+                      SizedBox(height: height * 0.03),
                       Text(
                         '-Or Login with-',
                         style: TextStyle(
                           color: Color(0xff000000),
                         ),
                       ),
-                      SizedBox(height: height * 0.02),
+                      SizedBox(height: height * 0.01),
                       isLoading
                           ? const CircularProgressIndicator()
                           : ClipRRect(
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                      SizedBox(height: height * 0.07),
+                      SizedBox(height: height * 0.05),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -217,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Color(0xff000000),
                             ),
                           ),
-                          SizedBox(height: height * 0.01),
+                          SizedBox(height: height * 0.001),
                           Container(
                             height: height * 0.05,
                             width: width * 0.3,
@@ -254,12 +254,20 @@ class _LoginPageState extends State<LoginPage> {
                                 'Sign up',
                                 style: TextStyle(
                                   color: Color(0xff8da2e2),
-                                  fontSize: width * 0.03,
+                                  fontSize: width * 0.045,
                                 ),
                               ),
                             ),
                           ),
                         ],
+                      ),
+                      SizedBox(height: height * 0.05), // Added space
+                      Text(
+                        'Copyright © 2024 SD-H USAI',
+                        style: TextStyle(
+                          color: Color(0xff000000),
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uas/accountpage/account_page.dart';
+import 'package:uas/homepage/home_page.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -9,11 +11,36 @@ class AboutUsPage extends StatefulWidget {
 
 class _AboutUsPage extends State<AboutUsPage> {
   final List<Member> members = [
-    Member(name: 'Jafier Andreas', id: '535220013', initials: 'JA'),
-    Member(name: 'Nelson', id: '535220021', initials: 'NL'),
-    Member(name: 'Jessen Chayadi', id: '535220023', initials: 'JC'),
-    Member(name: 'Finnia Li', id: '535220030', initials: 'FL'),
-    Member(name: 'Timoty Wahyudi P', id: '535220043', initials: 'TP'),
+    Member(
+        name: 'Jafier Andreas',
+        id: '535220013',
+        initials: 'JA',
+        qrCodePath: 'assets/qrmember/linkJafier.png',
+        link: 'Discord : https://s.id/26VYj'),
+    Member(
+        name: 'Nelson',
+        id: '535220021',
+        initials: 'NL',
+        qrCodePath: 'assets/qrmember/linkNelson.png',
+        link: 'Instagram : https://s.id/26VY9'),
+    Member(
+        name: 'Jessen Chayadi',
+        id: '535220023',
+        initials: 'JC',
+        qrCodePath: 'assets/qrmember/linkJC.png',
+        link: 'LinkedIn : https://s.id/26VY8'),
+    Member(
+        name: 'Finnia Li',
+        id: '535220030',
+        initials: 'FL',
+        qrCodePath: 'assets/qrmember/linkFinnia.png',
+        link: 'Instagram : https://s.id/26VYm'),
+    Member(
+        name: 'Timoty Wahyudi P',
+        id: '535220043',
+        initials: 'TP',
+        qrCodePath: 'assets/qrmember/linkTimot.png',
+        link: 'WhatsApp : https://s.id/26VYe'),
   ];
 
   @override
@@ -27,7 +54,14 @@ class _AboutUsPage extends State<AboutUsPage> {
         titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AccountPage(),
+              ),
+            );
+          },
         ),
       ),
       body: Padding(
@@ -68,8 +102,16 @@ class Member {
   final String name;
   final String id;
   final String initials;
+  final String qrCodePath;
+  final String link;
 
-  Member({required this.name, required this.id, required this.initials});
+  Member({
+    required this.name,
+    required this.id,
+    required this.initials,
+    required this.qrCodePath,
+    required this.link,
+  });
 }
 
 class MemberTile extends StatelessWidget {
@@ -81,16 +123,44 @@ class MemberTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.orange,
-          child: Text(
-            member.initials,
-            style: TextStyle(color: Colors.white),
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(member.name),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(member.qrCodePath),
+                    SizedBox(height: 16),
+                    Text(member.link),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Colors.orange,
+            child: Text(
+              member.initials,
+              style: TextStyle(color: Colors.white),
+            ),
           ),
+          title: Text(member.name),
+          subtitle: Text(member.id),
         ),
-        title: Text(member.name),
-        subtitle: Text(member.id),
       ),
     );
   }

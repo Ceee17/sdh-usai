@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/accountpage/edit_profile_page.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/login_page.dart';
 import 'package:uas/widgets/button.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  const AccountPage({super.key});
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -49,26 +50,12 @@ class _AccountPageState extends State<AccountPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          // if (!snapshot.hasData || !snapshot.data!.exists) {
-          //   return Column(
-          //     children: [
-          //       Text('User data not found.'),
-          //       SizedBox(height: 20),
-          //       CustomButton(
-          //         label: 'Logout',
-          //         onPressed: () async {
-          //           await _auth.signout();
-          //           _navigateToLoginPage(context);
-          //         },
-          //       )
-          //     ],
-          //   );
-          // }
-
           Map<String, dynamic>? userData;
           if (snapshot.data != null && snapshot.data!.exists) {
             userData = snapshot.data!.data() as Map<String, dynamic>;
           }
+
+          String? displayImageUrl = user?.photoURL ?? userData?['imageUrl'];
 
           return Center(
             child: Column(
@@ -76,8 +63,8 @@ class _AccountPageState extends State<AccountPage> {
                 SizedBox(height: 20),
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: user?.photoURL != null
-                      ? NetworkImage(user!.photoURL!)
+                  backgroundImage: displayImageUrl != null
+                      ? NetworkImage(displayImageUrl)
                       : AssetImage('assets/avatar.png')
                           as ImageProvider<Object>?,
                 ),
@@ -138,8 +125,13 @@ class _AccountPageState extends State<AccountPage> {
                         title: Text('About Us'),
                         onTap: () {
                           // Navigate to Customer Services screen
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AboutUsPage(),
+                              ));
                         },
-                        enabled: false,
+                        // enabled: false,
                       ),
                       Divider(),
                       ListTile(
