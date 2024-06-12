@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/accountpage/edit_profile_page.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/login_page.dart';
@@ -124,8 +125,13 @@ class _AccountPageState extends State<AccountPage> {
                         title: Text('About Us'),
                         onTap: () {
                           // Navigate to Customer Services screen
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AboutUsPage(),
+                              ));
                         },
-                        enabled: false,
+                        // enabled: false,
                       ),
                       Divider(),
                       ListTile(
