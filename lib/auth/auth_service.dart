@@ -34,18 +34,6 @@ class AuthService {
     return null;
   }
 
-  // Future<void> createUserDocument(User user) async {
-  //   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  //   await firestore.collection('users').doc(user.uid).set({
-  //     'email': user.email,
-  //     'displayName': user.displayName,
-  //     'phoneNumber': user.phoneNumber,
-  //     'creationTime': user.metadata.creationTime?.toIso8601String(),
-  //     'lastSignInTime': user.metadata.lastSignInTime?.toIso8601String(),
-  //   });
-  // }
-
   Future<User?> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
@@ -75,8 +63,14 @@ class AuthService {
     return null;
   }
 
-  Future<void> updateUserProfile(String fullName, String email,
-      String phoneNumber, String username, String password) async {
+  Future<void> updateUserProfile(
+    String fullName,
+    String email,
+    String phoneNumber,
+    String username,
+    String password, {
+    String? imageUrl,
+  }) async {
     try {
       User? user = _auth.currentUser;
 
@@ -90,6 +84,7 @@ class AuthService {
           'email': email,
           'phoneNumber': phoneNumber,
           'username': username,
+          if (imageUrl != null) 'imageUrl': imageUrl,
         });
 
         // Update email with verification
