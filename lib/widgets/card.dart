@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/models/Item.dart';
@@ -194,6 +195,15 @@ class _ItemCardState extends State<ItemCard> {
     setState(() {
       isFavorite = !isFavorite;
     });
+    Fluttertoast.showToast(
+      msg: isFavorite
+          ? "Item has been saved to Favourites"
+          : "Item has been removed from Favourites",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+    );
   }
 
   @override

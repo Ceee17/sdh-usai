@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  final String totalPrice;
+
+  const PaymentPage({super.key, required this.totalPrice});
 
   @override
-  State<PaymentPage> createState() => _PaymentPage();
+  State<PaymentPage> createState() => _PaymentPageState();
 }
 
-class _PaymentPage extends State<PaymentPage> {
+class _PaymentPageState extends State<PaymentPage> {
   int _selectedPaymentMethod = 1;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = size.height;
+    final double parsedTotalPrice = double.tryParse(
+            widget.totalPrice.replaceAll(',', '').replaceAll('.', '')) ??
+        0.0;
+    final double tax = parsedTotalPrice * 0.1;
+    final double finalPrice = parsedTotalPrice + tax;
+    final numberFormat =
+        NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
     return Scaffold(
       appBar: AppBar(
@@ -63,31 +74,58 @@ class _PaymentPage extends State<PaymentPage> {
                               size: 50,
                             ),
                             SizedBox(width: 16.0),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Checkout Summary'),
-                                SizedBox(height: 8.0),
-                                Text('Subtotal'),
-                                Text('Tax 10%'),
-                                Text('Total Price'),
-                              ],
-                            ),
-                            Spacer(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(height: 30.0), // Align text with icon
-                                Text('600,000,00'),
-                                Text('60,000,00'),
-                                Text(
-                                  '660,000,00',
-                                  style: TextStyle(
-                                    color: Colors.orange,
-                                    fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Checkout Summary',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 8.0),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Subtotal'),
+                                      Text(numberFormat
+                                          .format(parsedTotalPrice)),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Tax 10%'),
+                                      Text(numberFormat.format(tax)),
+                                    ],
+                                  ),
+                                  Divider(), // Add Divider here
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Total Price',
+                                        style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        numberFormat.format(finalPrice),
+                                        style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -95,6 +133,7 @@ class _PaymentPage extends State<PaymentPage> {
                         GestureDetector(
                           onTap: () {
                             // Handle order details tap
+                            Navigator.pop(context);
                           },
                           child: Text(
                             'Order details',
@@ -116,75 +155,86 @@ class _PaymentPage extends State<PaymentPage> {
                     ),
                   ),
                   Expanded(
-                      child: SingleChildScrollView(
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: 7,
-                      separatorBuilder: (context, index) => Divider(),
-                      itemBuilder: (context, index) {
-                        final paymentMethods = [
-                          {
-                            'label': 'QRIS',
-                            'image': 'assets/payment/qris.png',
-                            'value': 1
-                          },
-                          {
-                            'label': 'BCA',
-                            'image': 'assets/payment/bca.png',
-                            'value': 2
-                          },
-                          {
-                            'label': 'ATM Bersama',
-                            'image': 'assets/payment/atm.png',
-                            'value': 3
-                          },
-                          {
-                            'label': 'Gopay',
-                            'image': 'assets/payment/gopay.png',
-                            'value': 4
-                          },
-                          {
-                            'label': 'OVO',
-                            'image': 'assets/payment/ovo.png',
-                            'value': 5
-                          },
-                          {
-                            'label': 'Dana',
-                            'image': 'assets/payment/dana.png',
-                            'value': 6
-                          },
-                          {
-                            'label': 'LinkAja',
-                            'image': 'assets/payment/linkaja.png',
-                            'value': 7
-                          },
-                        ];
+                    child: SingleChildScrollView(
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: 7,
+                        separatorBuilder: (context, index) => Divider(),
+                        itemBuilder: (context, index) {
+                          final paymentMethods = [
+                            {
+                              'label': 'QRIS',
+                              'image': 'assets/payment/qris.png',
+                              'value': 1
+                            },
+                            {
+                              'label': 'BCA',
+                              'image': 'assets/payment/bca.png',
+                              'value': 2
+                            },
+                            {
+                              'label': 'ATM Bersama',
+                              'image': 'assets/payment/atm.png',
+                              'value': 3
+                            },
+                            {
+                              'label': 'Gopay',
+                              'image': 'assets/payment/gopay.png',
+                              'value': 4
+                            },
+                            {
+                              'label': 'OVO',
+                              'image': 'assets/payment/ovo.png',
+                              'value': 5
+                            },
+                            {
+                              'label': 'Dana',
+                              'image': 'assets/payment/dana.png',
+                              'value': 6
+                            },
+                            {
+                              'label': 'LinkAja',
+                              'image': 'assets/payment/linkaja.png',
+                              'value': 7
+                            },
+                          ];
 
-                        return ListTile(
-                          leading: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Radio(
-                                value: paymentMethods[index]['value'] as int,
-                                groupValue: _selectedPaymentMethod,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedPaymentMethod = value as int;
-                                  });
-                                },
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedPaymentMethod =
+                                    paymentMethods[index]['value'] as int;
+                              });
+                            },
+                            child: ListTile(
+                              leading: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Radio(
+                                    value:
+                                        paymentMethods[index]['value'] as int,
+                                    groupValue: _selectedPaymentMethod,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedPaymentMethod = value as int;
+                                      });
+                                    },
+                                  ),
+                                  Image.asset(
+                                    paymentMethods[index]['image'] as String,
+                                    width: 30,
+                                  ),
+                                ],
                               ),
-                              Image.asset(
-                                paymentMethods[index]['image'] as String,
-                                width: 30,
-                              ),
-                            ],
-                          ),
-                          title: Text(paymentMethods[index]['label'] as String),
-                        );
-                      },
+                              title: Text(
+                                  paymentMethods[index]['label'] as String),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ))
+                  ),
                 ],
               ),
             ),
