@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uas/design/design.dart';
+import 'package:uas/widgets/card.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -64,12 +66,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "History",
-          style: TextStyle(
-            fontWeight: FontWeight.w900,
-          ),
-        ),
+        title: Text("History", style: appBar),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -85,9 +82,9 @@ class _HistoryPageState extends State<HistoryPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   buildChoiceChip('All'),
-                  SizedBox(width: 10),
+                  w(10),
                   buildChoiceChip('Ticket'),
-                  SizedBox(width: 10),
+                  w(10),
                   buildChoiceChip('Food'),
                 ],
               ),
@@ -107,56 +104,6 @@ class _HistoryPageState extends State<HistoryPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class HistoryItem extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String date;
-  final String category;
-
-  HistoryItem({
-    required this.imageUrl,
-    required this.title,
-    required this.date,
-    required this.category,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        children: [
-          Image.network(
-            imageUrl,
-            width: 75,
-            height: 75,
-            fit: BoxFit.cover,
-          ),
-          SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Text(
-                date,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
