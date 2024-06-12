@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/listdata/food_data.dart';
 import 'package:uas/models/CartItem.dart';
+import 'package:uas/routes.dart';
 import 'package:uas/widgets/button.dart';
 
 class CartPage extends StatefulWidget {
@@ -27,9 +29,51 @@ class _CartPageState extends State<CartPage> {
         item.quantity++;
       } else if (item.quantity > 0) {
         item.quantity--;
-        if (item.quantity == 0) tempFoodCart.remove(item);
+        if (item.quantity == 0) {
+          _showConfirmationDialog(item);
+        }
       }
     });
+  }
+
+  void _showConfirmationDialog(CartItem item) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Remove Item'),
+          content:
+              Text('Are you sure you want to remove this item from the cart?'),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                setState(() {
+                  item.quantity++;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Remove'),
+              onPressed: () {
+                setState(() {
+                  tempFoodCart.remove(item);
+                });
+                Navigator.of(context).pop();
+                Fluttertoast.showToast(
+                  msg: "Item has been removed from cart",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.black,
+                  textColor: Colors.white,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -114,47 +158,56 @@ class _CartPageState extends State<CartPage> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
+      body: filteredCart.isEmpty
+          ? Center(
               child: Text(
-                '${_calculateTotal((item) => item.quantity)} Item',
-                style: customText(18, FontWeight.normal, grey),
+                "There is nothing here :(",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
               ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCart.length,
-              itemBuilder: (context, index) =>
-                  buildCartItemCard(filteredCart[index]),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            )
+          : Column(
               children: [
-                Text('Total Prices',
-                    style: customText(18, FontWeight.w600, black)),
-                Text('Rp. $totalPrice,00',
-                    style: customText(18, FontWeight.w600, black)),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${_calculateTotal((item) => item.quantity)} Item',
+                      style: customText(18, FontWeight.normal, grey),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredCart.length,
+                    itemBuilder: (context, index) =>
+                        buildCartItemCard(filteredCart[index]),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Total Prices',
+                          style: customText(18, FontWeight.w600, black)),
+                      Text('Rp. $totalPrice,00',
+                          style: customText(18, FontWeight.w600, black)),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: PrimaryButton(
+                    label: 'Payment',
+                    onPressed: () {
+                      navigateToPaymentPage(context, totalPrice);
+                    },
+                    color: primaryColor,
+                  ),
+                ),
               ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: PrimaryButton(
-              label: 'Payment',
-              onPressed: null,
-              color: primaryColor,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/listdata/food_data.dart';
 import 'package:uas/models/CartItem.dart';
@@ -76,6 +77,14 @@ void showItemDetails(BuildContext context, Item item) {
                       foodZone: item.zone,
                     ));
                   }
+
+                  Fluttertoast.showToast(
+                    msg: "Item added to cart successfully",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                  );
                 },
                 child: PrimaryButton(
                   label: 'Add To Cart',

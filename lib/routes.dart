@@ -7,12 +7,14 @@ import 'package:uas/orderfoodpage/fauna_zone_page.dart';
 import 'package:uas/orderfoodpage/food_cart_page.dart';
 import 'package:uas/orderfoodpage/forest_zone_page.dart';
 import 'package:uas/orderfoodpage/sea_zone_page.dart';
+import 'package:uas/orderticketpage/ticket_order_page.dart';
+import 'package:uas/paymentpage/payment_page.dart';
 
 // HOMEPAGE ROUTES
 void navigateToOrderTicketPage(BuildContext context) {
   Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => Placeholder()),
+    MaterialPageRoute(builder: (context) => OrderTicketPage()),
   );
 }
 
@@ -108,6 +110,15 @@ void navigateToForestCart(BuildContext context) {
     context,
     MaterialPageRoute(
       builder: (context) => CartPage(foodZone: 'forest'),
+    ),
+  );
+}
+
+void navigateToPaymentPage(BuildContext context, String totalPrice) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PaymentPage(totalPrice: totalPrice),
     ),
   );
 }

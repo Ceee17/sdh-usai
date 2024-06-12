@@ -102,7 +102,9 @@ class HomeContent extends StatelessWidget {
                 OrderCard(
                   image: AssetImage('assets/ticket.png'),
                   label: 'Ticket',
-                  onPressed: () => Placeholder(),
+                  onPressed: () {
+                    navigateToOrderTicketPage(context);
+                  },
                 ),
                 w(16),
                 OrderCard(
