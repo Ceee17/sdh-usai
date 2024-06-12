@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           // primarySwatch: Colors.blue,
           ),
       debugShowCheckedModeBanner: false,
-      home: isFirstLaunch ? LoginPage() : Wrapper(),
+      home: isFirstLaunch ? StartingPage() : Wrapper(),
     );
   }
 }
