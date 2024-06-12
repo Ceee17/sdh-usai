@@ -3,8 +3,8 @@ import 'package:uas/accountpage/account_page.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/historypage/history_page.dart';
 import 'package:uas/listdata/reviews_data.dart';
-import 'package:uas/orderfoodpage/choose_zone_page.dart';
-import 'package:uas/widgets/button.dart';
+import 'package:uas/routes.dart';
+import 'package:uas/searchpage/search_page.dart';
 import 'package:uas/widgets/card.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeContent(),
-    Placeholder(), // Replace with your SearchPage
+    SearchPage(),
     HistoryPage(),
     AccountPage(),
   ];
@@ -35,23 +35,26 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-            backgroundColor: Colors.grey,
+            backgroundColor: black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'Search',
+            backgroundColor: black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'History',
+            backgroundColor: black,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
+            backgroundColor: black,
           ),
         ],
         currentIndex: _selectedIndex,
@@ -92,31 +95,26 @@ class HomeContent extends StatelessWidget {
               'Order',
               style: headerText(18),
             ),
-            h10,
+            h(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                OrderButton(
+                OrderCard(
                   image: AssetImage('assets/ticket.png'),
                   label: 'Ticket',
                   onPressed: () => Placeholder(),
                 ),
-                h16,
-                OrderButton(
+                w(16),
+                OrderCard(
                   icon: Icons.restaurant,
                   label: 'Food',
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ChooseZonePage(),
-                      ),
-                    );
+                    navigateToOrderFoodPage(context);
                   },
                 ),
               ],
             ),
-            h20,
+            h(20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -126,17 +124,13 @@ class HomeContent extends StatelessWidget {
                 ),
               ],
             ),
-            h10,
+            h(10),
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
-                  children: reviews.map((review) {
-                    return ReviewCard(
-                      review: review['review']!,
-                      name: review['name']!,
-                      image: review['image']!,
-                    );
-                  }).toList(),
+                  children: reviews
+                      .map((review) => ReviewCard(review: review))
+                      .toList(),
                 ),
               ),
             ),
