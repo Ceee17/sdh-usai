@@ -127,9 +127,3 @@ class StartingPage extends StatelessWidget {
     );
   }
 }
-
-void main() {
-  runApp(MaterialApp(
-    home: StartingPage(),
-  ));
-}
