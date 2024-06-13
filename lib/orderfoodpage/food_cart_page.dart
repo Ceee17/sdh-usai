@@ -3,9 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/listdata/food_data.dart';
-import 'package:uas/models/CartItem.dart';
+import 'package:uas/models/CartFood.dart';
 import 'package:uas/routes.dart';
 import 'package:uas/widgets/button.dart';
+import 'package:uas/widgets/card.dart';
 
 class CartPage extends StatefulWidget {
   final String foodZone;
@@ -17,13 +18,13 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  int _calculateTotal(int Function(CartItem) selector) {
+  int _calculateTotal(int Function(CartFood) selector) {
     return tempFoodCart
         .where((item) => item.foodZone == widget.foodZone)
         .fold(0, (total, item) => total + selector(item));
   }
 
-  void _updateQuantity(CartItem item, bool increment) {
+  void _updateQuantity(CartFood item, bool increment) {
     setState(() {
       if (increment) {
         item.quantity++;
@@ -36,7 +37,7 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  void _showConfirmationDialog(CartItem item) {
+  void _showConfirmationDialog(CartFood item) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -78,77 +79,11 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<CartItem> filteredCart =
+    List<CartFood> filteredCart =
         tempFoodCart.where((item) => item.foodZone == widget.foodZone).toList();
     final numberFormat = NumberFormat.decimalPattern('id');
     final totalPrice = numberFormat
         .format(_calculateTotal((item) => item.price * item.quantity));
-
-    Widget buildCartItemCard(CartItem item) {
-      final itemPrice = numberFormat.format(item.price);
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.network(
-                    item.imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 200.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          item.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
-                          ),
-                        ),
-                        SizedBox(height: 5.0),
-                        Text(
-                          'Rp. $itemPrice,00',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () => _updateQuantity(item, false),
-                        ),
-                        Text('${item.quantity}'),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () => _updateQuantity(item, true),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -181,7 +116,7 @@ class _CartPageState extends State<CartPage> {
                   child: ListView.builder(
                     itemCount: filteredCart.length,
                     itemBuilder: (context, index) =>
-                        buildCartItemCard(filteredCart[index]),
+                        buildCartFoodCard(filteredCart[index], _updateQuantity),
                   ),
                 ),
                 Padding(
@@ -198,12 +133,11 @@ class _CartPageState extends State<CartPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: PrimaryButton(
-                    label: 'Payment',
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       navigateToPaymentPage(context, totalPrice);
                     },
-                    color: primaryColor,
+                    child: PrimaryBtn('Payment'),
                   ),
                 ),
               ],

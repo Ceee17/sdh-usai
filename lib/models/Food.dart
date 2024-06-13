@@ -1,4 +1,6 @@
-class Item {
+import 'package:uas/models/Searchable.dart';
+
+class Food implements Searchable {
   final String image;
   final String title;
   final int price;
@@ -6,7 +8,7 @@ class Item {
   final String zone;
   final String category;
 
-  Item({
+  Food({
     required this.image,
     required this.title,
     required this.price,

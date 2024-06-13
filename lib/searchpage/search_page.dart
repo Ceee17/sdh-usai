@@ -1,55 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:uas/design/design.dart';
+import 'package:uas/listdata/combined_data.dart';
+import 'package:uas/models/Searchable.dart';
+import 'package:uas/models/Zone.dart';
+import 'package:uas/models/Food.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPage();
+  State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPage extends State<SearchPage> {
+class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  final List<Map<String, String>> _items = [
-    {
-      'title': 'Fauna Land',
-      'price': 'Rp. 100,000,00 - Rp. 300,000,00',
-      'image': 'assets/food1.png'
-    },
-    {
-      'title': 'Sea World',
-      'price': 'Rp. 100,000,00 - Rp. 300,000,00',
-      'image': 'assets/food1.png'
-    },
-    {
-      'title': 'Bird Land',
-      'price': 'Rp. 100,000,00 - Rp. 300,000,00',
-      'image': 'assets/food1.png'
-    },
-    {
-      'title': 'Jungle Land',
-      'price': 'Rp. 100,000,00 - Rp. 300,000,00',
-      'image': 'assets/food1.png'
-    },
-    {
-      'title': 'Easy homemade beef burger',
-      'price': 'Rp. 85,000,00',
-      'image': 'assets/food1.png'
-    },
-    {
-      'title': 'Half boiled egg sandwich',
-      'price': 'Rp. 45,000,00',
-      'image': 'assets/food1.png'
-    },
-  ];
-
-  List<Map<String, String>> _filteredItems = [];
+  List<Searchable> _filteredItems = [];
   String _currentQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = List.from(_items);
+    _filteredItems = List.from(mixedList);
     _searchController.addListener(_filterItems);
   }
 
@@ -57,9 +28,12 @@ class _SearchPage extends State<SearchPage> {
     final query = _searchController.text.toLowerCase();
     setState(() {
       _currentQuery = query;
-      _filteredItems = _items.where((item) {
-        return item['title']?.toLowerCase().contains(query) ?? false;
-      }).toList();
+      _filteredItems = mixedList
+          .where((item) {
+            return item.title.toLowerCase().contains(query);
+          })
+          .cast<Searchable>()
+          .toList();
     });
   }
 
@@ -111,11 +85,16 @@ class _SearchPage extends State<SearchPage> {
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                       children: _filteredItems.map((item) {
-                        return buildCard(
-                          item['title'] ?? '',
-                          item['price'] ?? '',
-                          item['image'] ?? '',
-                        );
+                        if (item is Zone) {
+                          return GestureDetector(
+                            onTap: () => item.onTap(context),
+                            child: buildCard(item.title, item.image, 'ticket'),
+                          );
+                        } else if (item is Food) {
+                          return buildCard(item.title, item.image, 'food',
+                              price: item.price);
+                        }
+                        return SizedBox.shrink();
                       }).toList(),
                     ),
             ),
@@ -125,7 +104,8 @@ class _SearchPage extends State<SearchPage> {
     );
   }
 
-  Widget buildCard(String title, String price, String imagePath) {
+  Widget buildCard(String title, String imagePath, String category,
+      {int? price}) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
@@ -134,19 +114,11 @@ class _SearchPage extends State<SearchPage> {
         children: [
           Stack(
             children: [
-              Image.asset(
+              Image.network(
                 imagePath,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 100,
-              ),
-              Positioned(
-                top: 5,
-                right: 5,
-                child: Icon(
-                  Icons.favorite,
-                  color: Colors.white,
-                ),
               ),
             ],
           ),
@@ -156,12 +128,12 @@ class _SearchPage extends State<SearchPage> {
             style: TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 5.0),
-          Text(
-            price,
-            style: TextStyle(color: Colors.grey),
-            textAlign: TextAlign.center,
-          ),
+          if (price != null)
+            Text(
+              'Rp. $price',
+              style: TextStyle(color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
         ],
       ),
     );

@@ -1,99 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/design/design.dart';
-import 'package:uas/listdata/food_data.dart';
-import 'package:uas/models/CartItem.dart';
-import 'package:uas/models/Item.dart';
-import 'package:uas/widgets/button.dart';
+import 'package:uas/models/Food.dart';
+import 'package:uas/models/Zone.dart';
 import 'package:uas/widgets/card.dart';
-import 'package:intl/intl.dart';
+import 'package:uas/widgets/modal.dart';
 
-// FOODLIST GRID
-Widget buildItemGrid(BuildContext context, List<Item> items) {
+// ZONELIST GRID
+Widget buildZoneGrid(BuildContext context, List<Zone> zones) {
   return GridView.builder(
     shrinkWrap: true,
     physics: const NeverScrollableScrollPhysics(),
-    gridDelegate: GridFixedCrossAxisCount(2, 3, 4, 10, 10),
-    itemCount: items.length,
-    itemBuilder: (context, index) {
+    gridDelegate: GridFixedCrossAxisCount(2, 1, 10, 10),
+    itemCount: zones.length,
+    itemBuilder: (context, int index) {
       return GestureDetector(
-        onTap: () => showItemDetails(context, items[index]),
-        child: ItemCard(item: items[index]),
+        onTap: () => zones[index].onTap(context),
+        child: ZoneCard(
+          zone: zones[index],
+        ),
       );
     },
   );
 }
 
-void showItemDetails(BuildContext context, Item item) {
-  final formattedPrice = NumberFormat.decimalPattern('id').format(item.price);
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    builder: (context) {
-      return FractionallySizedBox(
-        heightFactor: 0.7,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.network(
-                  item.image,
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(item.title, style: clipText),
-              SizedBox(height: 14),
-              Text("Rp. $formattedPrice,00", style: priceText),
-              SizedBox(height: 10),
-              Text(item.description ?? 'No description available',
-                  style: descText),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  bool itemFound = false;
-                  for (var cartItem in tempFoodCart) {
-                    if (cartItem.name == item.title &&
-                        cartItem.foodZone == item.zone) {
-                      cartItem.quantity++;
-                      itemFound = true;
-                      break;
-                    }
-                  }
-
-                  if (!itemFound) {
-                    tempFoodCart.add(CartItem(
-                      name: item.title,
-                      imageUrl: item.image,
-                      price: item.price,
-                      quantity: 1,
-                      foodZone: item.zone,
-                    ));
-                  }
-
-                  Fluttertoast.showToast(
-                    msg: "Item added to cart successfully",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
-                  );
-                },
-                child: PrimaryButton(
-                  label: 'Add To Cart',
-                  onPressed: null,
-                  color: primaryColor,
-                ),
-              ),
-            ],
-          ),
+// FOODLIST GRID
+Widget buildFoodGrid(BuildContext context, List<Food> food) {
+  return GridView.builder(
+    shrinkWrap: true,
+    physics: const NeverScrollableScrollPhysics(),
+    gridDelegate: GridFixedCrossAxisCount(2, 0.8, 10, 10),
+    itemCount: food.length,
+    itemBuilder: (context, index) {
+      return GestureDetector(
+        onTap: () => showItemDetails(context, food[index]),
+        child: FoodCard(
+          food: food[index],
         ),
       );
     },

@@ -94,10 +94,10 @@ BoxDecoration primaryBtnBox = BoxDecoration(
 // GridStyling
 
 SliverGridDelegateWithFixedCrossAxisCount GridFixedCrossAxisCount(
-    int cAC, int cART, int cARB, double cAS, double mAS) {
+    int cAC, double cAR, double cAS, double mAS) {
   return SliverGridDelegateWithFixedCrossAxisCount(
     crossAxisCount: cAC,
-    childAspectRatio: cART / cARB,
+    childAspectRatio: cAR,
     crossAxisSpacing: cAS,
     mainAxisSpacing: mAS,
   );

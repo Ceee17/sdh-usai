@@ -3,8 +3,7 @@ import 'package:uas/design/design.dart';
 import 'package:uas/listdata/zone_data.dart';
 import 'package:uas/routes.dart';
 import 'package:uas/widgets/button.dart';
-import 'package:uas/widgets/card.dart';
-import 'package:uas/widgets/modal.dart';
+import 'package:uas/widgets/grid.dart';
 import 'package:video_player/video_player.dart';
 
 class ChooseZonePage extends StatefulWidget {
@@ -87,22 +86,7 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
                 style: headerText(24),
               ),
               h(20),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16.0,
-                  mainAxisSpacing: 16.0,
-                  children: zoneData.map((zone) {
-                    return GestureDetector(
-                      onTap: () => zone['onTap'](context),
-                      child: ZoneCard(
-                        imageUrl: zone['imageUrl'],
-                        title: zone['title'],
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
+              Expanded(child: buildZoneGrid(context, zoneData)),
             ],
           ),
         ),
@@ -165,10 +149,10 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
                             },
                             child: vidController.value.isPlaying
                                 ? Container()
-                                : const Icon(
+                                : Icon(
                                     Icons.play_arrow,
                                     size: 64.0,
-                                    color: Colors.white,
+                                    color: white,
                                   ),
                           );
                         },
@@ -178,7 +162,7 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
                 ),
                 h(20),
                 Text(
-                  "Short video of all of the places that we have",
+                  "A short video of all the places we have",
                   style: headerText(20),
                 ),
                 Spacer(),

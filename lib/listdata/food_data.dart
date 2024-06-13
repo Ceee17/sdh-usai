@@ -1,9 +1,15 @@
-import 'package:uas/models/CartItem.dart';
-import 'package:uas/models/Item.dart';
+import 'package:uas/models/CartFood.dart';
+import 'package:uas/models/Food.dart';
 
-// FAUNA ITEMS
-final List<Item> faunaItems = [
-  Item(
+// FILTERED
+List<Food> filterFoodByZone(String zone) {
+  return Foods.where((food) => food.zone == zone).toList();
+}
+
+// FOOD ITEMS
+final List<Food> Foods = [
+  // FAUNA
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Jungle Jambalaya',
     price: 75000,
@@ -12,7 +18,7 @@ final List<Item> faunaItems = [
     zone: 'fauna',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Wildlife Wrap',
     price: 45000,
@@ -21,7 +27,7 @@ final List<Item> faunaItems = [
     zone: 'fauna',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Savannah Salad',
     price: 50000,
@@ -30,7 +36,7 @@ final List<Item> faunaItems = [
     zone: 'fauna',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Safari Smoothies',
     price: 35000,
@@ -40,11 +46,9 @@ final List<Item> faunaItems = [
     category: 'food',
   ),
   // Add more items here
-];
 
-// SEA ITEMS
-final List<Item> seaItems = [
-  Item(
+  // SEA
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Ocean Breeze Salad',
     price: 50000,
@@ -53,7 +57,7 @@ final List<Item> seaItems = [
     zone: 'sea',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Seafood Paella',
     price: 72000,
@@ -62,7 +66,7 @@ final List<Item> seaItems = [
     zone: 'sea',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Salmon Sandwich',
     price: 85000,
@@ -71,7 +75,7 @@ final List<Item> seaItems = [
     zone: 'sea',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Tropical Fruit Bowl',
     price: 45000,
@@ -81,11 +85,9 @@ final List<Item> seaItems = [
     category: 'food',
   ),
   // Add more items here
-];
 
-// BIRD ITEMS
-final List<Item> birdItems = [
-  Item(
+  // BIRD
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Avian Avocado Toast',
     price: 45000,
@@ -94,7 +96,7 @@ final List<Item> birdItems = [
     zone: 'bird',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Feathered Tacos',
     price: 30000,
@@ -103,7 +105,7 @@ final List<Item> birdItems = [
     zone: 'bird',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: "Bird's Nest Pasta",
     price: 75000,
@@ -112,7 +114,7 @@ final List<Item> birdItems = [
     zone: 'bird',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Parrot Parfait',
     price: 45000,
@@ -122,11 +124,9 @@ final List<Item> birdItems = [
     category: 'food',
   ),
   // Add more items here
-];
 
-// FOREST ITEMS
-final List<Item> forestItems = [
-  Item(
+  // FOREST
+  Food(
     image: 'https://via.placeholder.com/150',
     title: "Witch's Brew Soup",
     price: 45000,
@@ -135,7 +135,7 @@ final List<Item> forestItems = [
     zone: 'forest',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Ghostly Shrimp',
     price: 60000,
@@ -144,7 +144,7 @@ final List<Item> forestItems = [
     zone: 'forest',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Mystical Mushroom Risotto',
     price: 55000,
@@ -152,7 +152,7 @@ final List<Item> forestItems = [
     zone: 'forest',
     category: 'food',
   ),
-  Item(
+  Food(
     image: 'https://via.placeholder.com/150',
     title: 'Haunted House Brownies',
     price: 35000,
@@ -164,4 +164,4 @@ final List<Item> forestItems = [
   // Add more items here
 ];
 
-List<CartItem> tempFoodCart = [];
+List<CartFood> tempFoodCart = [];
