@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/listdata/food_data.dart';
-import 'package:uas/orderfoodpage/choose_zone_page.dart';
 import 'package:uas/routes.dart';
 import 'package:uas/widgets/grid.dart';
 
@@ -18,25 +17,11 @@ class _ForestZonePageState extends State<ForestZonePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Spooky Forest',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: appBar,
         ),
         centerTitle: true,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ChooseZonePage(),
-              ),
-            );
-          },
-        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.shopping_basket),

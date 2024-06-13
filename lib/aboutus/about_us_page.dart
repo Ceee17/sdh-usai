@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uas/accountpage/account_page.dart';
-import 'package:uas/homepage/home_page.dart';
+import 'package:uas/design/design.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -47,22 +46,11 @@ class _AboutUsPage extends State<AboutUsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 0,
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AccountPage(),
-              ),
-            );
-          },
+        title: Text(
+          'About Us',
+          style: appBar,
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,7 +117,9 @@ class MemberTile extends StatelessWidget {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text(member.name),
+                title: Center(
+                  child: Text(member.name),
+                ),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
