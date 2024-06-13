@@ -66,8 +66,8 @@ class _CartPageState extends State<CartPage> {
                   msg: "Item has been removed from cart",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
-                  backgroundColor: Colors.black,
-                  textColor: Colors.white,
+                  backgroundColor: black,
+                  textColor: white,
                 );
               },
             ),

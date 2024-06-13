@@ -17,6 +17,9 @@ final List<Zone> zoneData = [
       navigateToFaunaZonePage(context);
     },
     category: 'ticket',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel metus malesuada, hendrerit risus ac, tincidunt mauris. Phasellus rhoncus velit sit amet lectus viverra mollis.',
+    zone: 'fauna',
   ),
   Zone(
     image: 'https://via.placeholder.com/150',
@@ -27,6 +30,9 @@ final List<Zone> zoneData = [
       navigateToSeaZonePage(context);
     },
     category: 'ticket',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel metus malesuada, hendrerit risus ac, tincidunt mauris. Phasellus rhoncus velit sit amet lectus viverra mollis.',
+    zone: 'sea',
   ),
   Zone(
     image: 'https://via.placeholder.com/150',
@@ -37,6 +43,9 @@ final List<Zone> zoneData = [
       navigateToBirdZonePage(context);
     },
     category: 'ticket',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel metus malesuada, hendrerit risus ac, tincidunt mauris. Phasellus rhoncus velit sit amet lectus viverra mollis.',
+    zone: 'bird',
   ),
   Zone(
     image: 'https://via.placeholder.com/150',
@@ -47,21 +56,8 @@ final List<Zone> zoneData = [
       navigateToForestZonePage(context);
     },
     category: 'ticket',
-  ),
-  Zone(
-    image: 'https://via.placeholder.com/150',
-    title: 'Coming Soon!',
-    priceStart: priceStartCS,
-    priceEnd: priceEndCS,
-    onTap: (BuildContext context) {},
-    category: 'ticket',
-  ),
-  Zone(
-    image: 'https://via.placeholder.com/150',
-    title: 'Coming Soon!',
-    priceStart: priceStartCS,
-    priceEnd: priceEndCS,
-    onTap: (BuildContext context) {},
-    category: 'ticket',
+    description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel metus malesuada, hendrerit risus ac, tincidunt mauris. Phasellus rhoncus velit sit amet lectus viverra mollis.',
+    zone: 'forest',
   ),
 ];

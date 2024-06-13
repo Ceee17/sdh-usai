@@ -10,6 +10,8 @@ class Zone implements Searchable {
   final int? priceEnd;
   final void Function(BuildContext context) onTap;
   final String category;
+  final String description;
+  final String zone;
 
   Zone({
     required this.image,
@@ -18,5 +20,7 @@ class Zone implements Searchable {
     this.priceEnd,
     required this.onTap,
     required this.category,
+    required this.description,
+    required this.zone,
   });
 }

@@ -379,3 +379,64 @@ class PacketCard extends StatelessWidget {
     );
   }
 }
+
+// SEARCH CARD
+Widget SearchCard(String title, String imagePath, String category,
+    {int? priceStart, int? priceEnd}) {
+  final formattedPrice = NumberFormat.decimalPattern('id');
+  final formattedStartPrice =
+      priceStart != null ? formattedPrice.format(priceStart) : null;
+  final formattedEndPrice =
+      priceEnd != null ? formattedPrice.format(priceEnd) : null;
+
+  return Card(
+    color: white,
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+            child: Image.network(
+              imagePath,
+              width: double.infinity,
+              height: 130,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          height: 92,
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: cardText),
+              h(4),
+              if ((category == 'ticket' &&
+                      formattedStartPrice != null &&
+                      formattedEndPrice != null) ||
+                  (category == 'food' && formattedStartPrice != null))
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      category == 'ticket'
+                          ? "Rp. $formattedStartPrice,00 -      Rp. $formattedEndPrice,00"
+                          : "Rp. $formattedStartPrice,00",
+                      style: priceText,
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}

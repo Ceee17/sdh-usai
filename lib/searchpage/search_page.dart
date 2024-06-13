@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/listdata/combined_data.dart';
 import 'package:uas/models/Searchable.dart';
-import 'package:uas/models/Zone.dart';
-import 'package:uas/models/Food.dart';
+import 'package:uas/widgets/grid.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -46,14 +45,16 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Search', style: appBar),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         width: 420,
         height: 800,
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
@@ -66,75 +67,20 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            h(20),
             Expanded(
               child: _filteredItems.isEmpty
                   ? Center(
                       child: Text(
                         "Well, there is no '$_currentQuery' result you are looking for :(",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: customText(24, FontWeight.bold, black),
                         textAlign: TextAlign.center,
                       ),
                     )
-                  : GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      children: _filteredItems.map((item) {
-                        if (item is Zone) {
-                          return GestureDetector(
-                            onTap: () => item.onTap(context),
-                            child: buildCard(item.title, item.image, 'ticket'),
-                          );
-                        } else if (item is Food) {
-                          return buildCard(item.title, item.image, 'food',
-                              price: item.price);
-                        }
-                        return SizedBox.shrink();
-                      }).toList(),
-                    ),
+                  : buildSearchGrid(context, _filteredItems),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildCard(String title, String imagePath, String category,
-      {int? price}) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              Image.network(
-                imagePath,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: 100,
-              ),
-            ],
-          ),
-          SizedBox(height: 5.0),
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          if (price != null)
-            Text(
-              'Rp. $price',
-              style: TextStyle(color: Colors.grey),
-              textAlign: TextAlign.center,
-            ),
-        ],
       ),
     );
   }
