@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/auth/login_page.dart';
 import 'package:uas/homepage/home_page.dart';
+import 'package:uas/models/CartFood.dart';
 import 'package:uas/orderfoodpage/bird_zone_page.dart';
 import 'package:uas/orderfoodpage/choose_zone_page.dart';
 import 'package:uas/orderfoodpage/fauna_zone_page.dart';
@@ -125,7 +125,7 @@ void navigateToForestCart(BuildContext context) {
 
 void navigateToPaymentPage(BuildContext context, String totalPrice,
     List<Map<String, dynamic>> foodItems) {
-  List<CartItem> cartItems = foodItems.map((item) {
+  List<CartFood> cartItems = foodItems.map((item) {
     // Check for null values and provide defaults if necessary
     String name = item['name'] ?? 'Unknown';
     String imageUrl = item['imageUrl'] ?? '';
@@ -134,7 +134,7 @@ void navigateToPaymentPage(BuildContext context, String totalPrice,
     String foodZone = item['foodZone'] ?? '';
     String category = item['category'] ?? '';
 
-    return CartItem(
+    return CartFood(
       name: name,
       imageUrl: imageUrl,
       price: price,

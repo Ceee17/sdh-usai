@@ -9,7 +9,7 @@ import 'package:uas/paymentpage/success_page.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
-  final List<CartItem> cartItems;
+  final List<CartFood> cartItems;
 
   const PaymentPage(
       {super.key, required this.totalPrice, required this.cartItems});
