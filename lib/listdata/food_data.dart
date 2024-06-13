@@ -45,7 +45,6 @@ final List<Food> Foods = [
     zone: 'fauna',
     category: 'food',
   ),
-  // Add more items here
 
   // SEA
   Food(
@@ -84,7 +83,6 @@ final List<Food> Foods = [
     zone: 'sea',
     category: 'food',
   ),
-  // Add more items here
 
   // BIRD
   Food(
@@ -123,7 +121,6 @@ final List<Food> Foods = [
     zone: 'bird',
     category: 'food',
   ),
-  // Add more items here
 
   // FOREST
   Food(
@@ -161,7 +158,6 @@ final List<Food> Foods = [
     zone: 'forest',
     category: 'food',
   ),
-  // Add more items here
 ];
 
 List<CartFood> tempFoodCart = [];

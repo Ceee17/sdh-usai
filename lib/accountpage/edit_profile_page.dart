@@ -5,10 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'dart:io';
-
 import 'package:uas/design/design.dart';
-
-Color primaryColor = Color(0xFFFFA62F);
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -198,7 +195,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   ElevatedButton(
                     onPressed: isLoading
                         ? null
@@ -257,7 +254,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.5),
+              color: black.withOpacity(0.5),
               child: Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 3,
