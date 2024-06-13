@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/auth/login_page.dart';
+import 'package:uas/homepage/home_page.dart';
 import 'package:uas/models/CartItem.dart';
 import 'package:uas/orderfoodpage/bird_zone_page.dart';
 import 'package:uas/orderfoodpage/choose_zone_page.dart';
@@ -13,6 +14,13 @@ import 'package:uas/orderticketpage/ticket_order_page.dart';
 import 'package:uas/paymentpage/payment_page.dart';
 
 // HOMEPAGE ROUTES
+void navigateToHomePage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => HomePage()),
+  );
+}
+
 void navigateToOrderTicketPage(BuildContext context) {
   Navigator.push(
     context,
