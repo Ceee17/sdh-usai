@@ -201,7 +201,20 @@ class _CartPageState extends State<CartPage> {
                   child: PrimaryButton(
                     label: 'Payment',
                     onPressed: () {
-                      navigateToPaymentPage(context, totalPrice);
+                      navigateToPaymentPage(
+                        context,
+                        totalPrice,
+                        filteredCart
+                            .map((item) => {
+                                  'name': item.name,
+                                  'price': item.price,
+                                  'quantity': item.quantity,
+                                  'category': item.category,
+                                  'imageUrl': item.imageUrl,
+                                  'foodZone': item.foodZone,
+                                })
+                            .toList(),
+                      );
                     },
                     color: primaryColor,
                   ),

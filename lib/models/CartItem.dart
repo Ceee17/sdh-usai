@@ -4,6 +4,7 @@ class CartItem {
   int price;
   int quantity;
   String foodZone;
+  String category;
 
   CartItem({
     required this.name,
@@ -11,5 +12,6 @@ class CartItem {
     required this.price,
     required this.quantity,
     required this.foodZone,
+    required this.category,
   });
 }
