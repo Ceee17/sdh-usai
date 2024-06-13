@@ -334,35 +334,26 @@ class HistoryItem extends StatelessWidget {
   final String title;
   final String date;
   final String category;
+  final String finalPrice; // Add this line
+  final String paymentMethod; // Add this line
 
-  HistoryItem({
+  const HistoryItem({
     required this.imageUrl,
     required this.title,
     required this.date,
     required this.category,
+    required this.finalPrice, // Add this line
+    required this.paymentMethod, // Add this line
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Row(
-        children: [
-          Image.network(
-            imageUrl,
-            width: 75,
-            height: 75,
-            fit: BoxFit.cover,
-          ),
-          w(20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: cardText),
-              Text(date, style: priceText),
-            ],
-          ),
-        ],
+    return Card(
+      child: ListTile(
+        leading: Image.network(imageUrl),
+        title: Text(title),
+        subtitle: Text("$date\n$finalPrice\n$paymentMethod"),
+        trailing: Text(category),
       ),
     );
   }

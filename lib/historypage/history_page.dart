@@ -12,7 +12,7 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  String selectedCategory = 'All';
+  String selectedCategory = 'all';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Widget buildChoiceChip(String label) {
@@ -21,10 +21,10 @@ class _HistoryPageState extends State<HistoryPage> {
         borderRadius: BorderRadius.circular(90),
       ),
       label: Text(label),
-      selected: selectedCategory == label,
+      selected: selectedCategory == label.toLowerCase(),
       onSelected: (bool selected) {
         setState(() {
-          selectedCategory = label;
+          selectedCategory = label.toLowerCase();
         });
       },
       selectedColor: Colors.orange,
@@ -36,12 +36,16 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     User? user = _auth.currentUser;
     if (user == null) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(
           child: Text("User not logged in"),
         ),
       );
     }
+
+    Query query = FirebaseFirestore.instance
+        .collection('history')
+        .where('userId', isEqualTo: user.uid);
 
     return Scaffold(
       appBar: AppBar(
@@ -61,55 +65,55 @@ class _HistoryPageState extends State<HistoryPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   buildChoiceChip('All'),
-                  w(10),
+                  const SizedBox(width: 10),
                   buildChoiceChip('Ticket'),
-                  w(10),
+                  const SizedBox(width: 10),
                   buildChoiceChip('Food'),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('history')
-                      .where('userId', isEqualTo: user.uid)
-                      .snapshots(),
+                  stream: query.snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return Center(child: Text("No history available"));
+                      return const Center(child: Text("No history available"));
                     }
 
                     List<Map<String, dynamic>> historyItems =
-                        snapshot.data!.docs
-                            .map((doc) => {
-                                  'imageUrl': doc['items'][0]['imageUrl'],
-                                  'title': doc['items'][0]['name'],
-                                  'date': (doc['date'] as Timestamp)
-                                      .toDate()
-                                      .toString(),
-                                  'category': doc['items'][0]['category'],
-                                })
-                            .toList();
+                        snapshot.data!.docs.map((doc) {
+                      var items = List<Map<String, dynamic>>.from(doc['items']);
+                      return {
+                        'imageUrl': items[0]['imageUrl'],
+                        'title': items[0]['name'],
+                        'category': items[0]['category'],
+                        'finalPrice': doc['finalPrice'],
+                        'paymentMethod': doc['paymentMethod'],
+                        'date': (doc['date'] as Timestamp).toDate().toString(),
+                      };
+                    }).toList();
 
-                    List<Map<String, dynamic>> filteredItems =
-                        selectedCategory == 'All'
-                            ? historyItems
-                            : historyItems
-                                .where((item) =>
-                                    item['category'] == selectedCategory)
-                                .toList();
+                    // Filter items based on selectedCategory
+                    if (selectedCategory != 'all') {
+                      historyItems = historyItems.where((item) {
+                        return item['category'].toString().toLowerCase() ==
+                            selectedCategory;
+                      }).toList();
+                    }
 
                     return ListView(
-                      children: filteredItems.map((item) {
+                      children: historyItems.map((item) {
                         return HistoryItem(
                           imageUrl: item['imageUrl']!,
                           title: item['title']!,
-                          date: item['date']!,
                           category: item['category']!,
+                          finalPrice: item['finalPrice']!,
+                          paymentMethod: item['paymentMethod']!,
+                          date: item['date']!,
                         );
                       }).toList(),
                     );
