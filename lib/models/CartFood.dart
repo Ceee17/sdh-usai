@@ -1,4 +1,4 @@
-class CartItem {
+class CartFood {
   String name;
   String imageUrl;
   int price;
@@ -6,7 +6,7 @@ class CartItem {
   String foodZone;
   String category;
 
-  CartItem({
+  CartFood({
     required this.name,
     required this.imageUrl,
     required this.price,

@@ -3,20 +3,20 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/listdata/food_data.dart';
-import 'package:uas/models/CartItem.dart';
-import 'package:uas/models/Item.dart';
+import 'package:uas/models/CartFood.dart';
+import 'package:uas/models/Food.dart';
 import 'package:uas/widgets/button.dart';
 
 // ITEM DETAILS MODAL
-void showItemDetails(BuildContext context, Item item) {
-  final formattedPrice = NumberFormat.decimalPattern('id').format(item.price);
+void showItemDetails(BuildContext context, Food food) {
+  final formattedPrice = NumberFormat.decimalPattern('id').format(food.price);
 
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (context) {
       return FractionallySizedBox(
-        heightFactor: 0.65,
+        heightFactor: 0.7,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -25,41 +25,41 @@ void showItemDetails(BuildContext context, Item item) {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  item.image,
+                  food.image,
                   width: double.infinity,
                   height: 300,
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 20),
-              Text(item.title, style: clipText),
-              SizedBox(height: 14),
+              h(20),
+              Text(food.title, style: clipText),
+              h(14),
               Text("Rp. $formattedPrice,00", style: priceText),
-              SizedBox(height: 10),
-              Text(item.description ?? 'No description available',
+              h(10),
+              Text(food.description ?? 'No description available',
                   style: descText),
               const Spacer(),
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-                  bool itemFound = false;
+                  bool foodFound = false;
                   for (var cartItem in tempFoodCart) {
-                    if (cartItem.name == item.title &&
-                        cartItem.foodZone == item.zone) {
+                    if (cartItem.name == food.title &&
+                        cartItem.foodZone == food.zone) {
                       cartItem.quantity++;
-                      itemFound = true;
+                      foodFound = true;
                       break;
                     }
                   }
 
-                  if (!itemFound) {
-                    tempFoodCart.add(CartItem(
-                      name: item.title,
-                      imageUrl: item.image,
-                      price: item.price,
+                  if (!foodFound) {
+                    tempFoodCart.add(CartFood(
+                      name: food.title,
+                      imageUrl: food.image,
+                      price: food.price,
                       quantity: 1,
-                      foodZone: item.zone,
-                      category: item.category,
+                      foodZone: food.zone,
+                      category: food.category,
                     ));
                   }
 
@@ -67,8 +67,8 @@ void showItemDetails(BuildContext context, Item item) {
                     msg: "Item added to cart successfully",
                     toastLength: Toast.LENGTH_SHORT,
                     gravity: ToastGravity.BOTTOM,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
+                    backgroundColor: black,
+                    textColor: white,
                   );
                 },
                 child: PrimaryBtn('Add To Cart'),

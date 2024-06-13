@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:uas/design/design.dart';
-import 'package:uas/homepage/home_page.dart';
 import 'package:uas/listdata/food_data.dart';
+import 'package:uas/models/Food.dart';
 import 'package:uas/routes.dart';
+import 'package:uas/widgets/card.dart';
 import 'package:uas/widgets/grid.dart';
 
 class SeaZonePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class SeaZonePage extends StatefulWidget {
 class _SeaZonePageState extends State<SeaZonePage> {
   @override
   Widget build(BuildContext context) {
+    List<Food> filteredFood = filterFoodByZone('sea');
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -37,25 +39,7 @@ class _SeaZonePageState extends State<SeaZonePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                color: white,
-                elevation: 4,
-                child: ListTile(
-                  title: const Text('Book Now !'),
-                  subtitle: const Text(
-                    'Now You Can Buy Zoo Ticket and Some food cheaper...',
-                  ),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomePage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              PacketCard(),
               h(20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,7 +51,7 @@ class _SeaZonePageState extends State<SeaZonePage> {
                 ],
               ),
               h(10),
-              buildItemGrid(context, seaItems),
+              buildFoodGrid(context, filteredFood),
             ],
           ),
         ),

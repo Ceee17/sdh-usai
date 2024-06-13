@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
-import 'package:uas/models/Item.dart';
+import 'package:uas/models/CartFood.dart';
+import 'package:uas/models/Food.dart';
 import 'package:uas/models/Review.dart';
+import 'package:uas/models/Zone.dart';
+import 'package:uas/routes.dart';
 
 // HOMEPAGE CARD
 class OrderCard extends StatelessWidget {
@@ -118,29 +121,23 @@ class ReviewCard extends StatelessWidget {
 }
 
 // ZONE CARD
-class ZoneCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
+class ZoneCard extends StatefulWidget {
+  final Zone zone;
 
-  ZoneCard({
-    required this.imageUrl,
-    required this.title,
-  });
+  const ZoneCard({required this.zone});
 
   @override
+  _ZoneCardState createState() => _ZoneCardState();
+}
+
+class _ZoneCardState extends State<ZoneCard> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
+    return Card(
+      color: white,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +150,7 @@ class ZoneCard extends StatelessWidget {
                   topRight: Radius.circular(8.0),
                 ),
                 child: Image.network(
-                  imageUrl,
+                  widget.zone.image,
                   width: double.infinity,
                   height: 130,
                   fit: BoxFit.cover,
@@ -167,7 +164,7 @@ class ZoneCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(title, style: cardText),
+                  Text(widget.zone.title, style: cardText),
                 ],
               ),
             ),
@@ -179,16 +176,16 @@ class ZoneCard extends StatelessWidget {
 }
 
 // FOOD CARD
-class ItemCard extends StatefulWidget {
-  final Item item;
+class FoodCard extends StatefulWidget {
+  final Food food;
 
-  const ItemCard({required this.item});
+  const FoodCard({required this.food});
 
   @override
-  _ItemCardState createState() => _ItemCardState();
+  _FoodCardState createState() => _FoodCardState();
 }
 
-class _ItemCardState extends State<ItemCard> {
+class _FoodCardState extends State<FoodCard> {
   bool isFavorite = false;
 
   void toggleFavorite() {
@@ -201,20 +198,20 @@ class _ItemCardState extends State<ItemCard> {
           : "Item has been removed from Favourites",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
+      backgroundColor: black,
+      textColor: white,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final formattedPrice =
-        NumberFormat.decimalPattern('id').format(widget.item.price);
+        NumberFormat.decimalPattern('id').format(widget.food.price);
     return Stack(
       children: [
         Card(
           color: white,
-          elevation: 4,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -226,8 +223,9 @@ class _ItemCardState extends State<ItemCard> {
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(10)),
                   child: Image.network(
-                    widget.item.image,
+                    widget.food.image,
                     width: double.infinity,
+                    height: 130,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -238,7 +236,7 @@ class _ItemCardState extends State<ItemCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.item.title, style: cardText),
+                    Text(widget.food.title, style: cardText),
                     h(4),
                     Text("Rp. ${formattedPrice},00", style: priceText),
                   ],
@@ -261,6 +259,73 @@ class _ItemCardState extends State<ItemCard> {
       ],
     );
   }
+}
+
+Widget buildCartFoodCard(CartFood item, Function _updateQuantity) {
+  final numberFormat = NumberFormat.decimalPattern('id');
+  final itemPrice = numberFormat.format(item.price);
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image.network(
+                item.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 200.0,
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      'Rp. $itemPrice,00',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove),
+                      onPressed: () => _updateQuantity(item, false),
+                    ),
+                    Text('${item.quantity}'),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      onPressed: () => _updateQuantity(item, true),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 // HISTORY CARD
@@ -298,6 +363,27 @@ class HistoryItem extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+// PAKCET CARD
+class PacketCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: white,
+      elevation: 4,
+      child: ListTile(
+        title: const Text('Book Now !'),
+        subtitle: const Text(
+          'Now You Can Buy Zoo Ticket and Some food cheaper...',
+        ),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: () {
+          navigateToOrderTicketPage(context);
+        },
       ),
     );
   }

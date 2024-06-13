@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:uas/design/design.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uas/models/CartItem.dart';
+import 'package:uas/models/CartFood.dart';
 import 'package:uas/paymentpage/success_page.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -35,19 +36,11 @@ class _PaymentPageState extends State<PaymentPage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         title: Text(
           'Payment',
+          style: appBar,
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
       ),
       body: Column(
         children: [
