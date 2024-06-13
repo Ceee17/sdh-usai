@@ -198,9 +198,8 @@ class _CartPageState extends State<CartPage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: PrimaryButton(
-                    label: 'Payment',
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       navigateToPaymentPage(
                         context,
                         totalPrice,
@@ -216,7 +215,7 @@ class _CartPageState extends State<CartPage> {
                             .toList(),
                       );
                     },
-                    color: primaryColor,
+                    child: PrimaryBtn('Payment'),
                   ),
                 ),
               ],

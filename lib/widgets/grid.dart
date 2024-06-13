@@ -87,11 +87,7 @@ void showItemDetails(BuildContext context, Item item) {
                     textColor: Colors.white,
                   );
                 },
-                child: PrimaryButton(
-                  label: 'Add To Cart',
-                  onPressed: null,
-                  color: primaryColor,
-                ),
+                child: PrimaryBtn('Add To Cart'),
               ),
             ],
           ),

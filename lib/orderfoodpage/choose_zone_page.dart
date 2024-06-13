@@ -49,6 +49,11 @@ class _ChooseZonePageState extends State<ChooseZonePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
+            /// The `navigateToHomePage(context);` function is likely a custom function defined
+            /// elsewhere in your codebase that is used to navigate to the home page of your
+            /// application. It is called when the back arrow button in the app bar is pressed in the
+            /// `ChooseZonePage` widget. Typically, this function would use a navigator to pop the
+            /// current route and return to the home page route in your app.
             navigateToHomePage(context);
           },
         ),

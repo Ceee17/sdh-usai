@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/widgets/card.dart';
 
@@ -11,33 +13,7 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   String selectedCategory = 'All';
-
-  final List<Map<String, String>> historyItems = [
-    {
-      'imageUrl': 'https://via.placeholder.com/150',
-      'title': 'Noodle Ex',
-      'date': '23 August 2021, 15:32',
-      'category': 'Food',
-    },
-    {
-      'imageUrl': 'https://via.placeholder.com/150',
-      'title': 'Noodle Ex',
-      'date': '23 August 2021, 15:32',
-      'category': 'Food',
-    },
-    {
-      'imageUrl': 'https://via.placeholder.com/150',
-      'title': 'Fauna Land',
-      'date': '23 August 2021, 15:32',
-      'category': 'Ticket',
-    },
-    {
-      'imageUrl': 'https://via.placeholder.com/150',
-      'title': 'Sea World',
-      'date': '23 August 2021, 15:32',
-      'category': 'Ticket',
-    },
-  ];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Widget buildChoiceChip(String label) {
     return ChoiceChip(
@@ -58,11 +34,14 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> filteredItems = selectedCategory == 'All'
-        ? historyItems
-        : historyItems
-            .where((item) => item['category'] == selectedCategory)
-            .toList();
+    User? user = _auth.currentUser;
+    if (user == null) {
+      return Scaffold(
+        body: Center(
+          child: Text("User not logged in"),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -90,15 +69,51 @@ class _HistoryPageState extends State<HistoryPage> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: ListView(
-                  children: filteredItems.map((item) {
-                    return HistoryItem(
-                      imageUrl: item['imageUrl']!,
-                      title: item['title']!,
-                      date: item['date']!,
-                      category: item['category']!,
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('history')
+                      .where('userId', isEqualTo: user.uid)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text("No history available"));
+                    }
+
+                    List<Map<String, dynamic>> historyItems =
+                        snapshot.data!.docs
+                            .map((doc) => {
+                                  'imageUrl': doc['items'][0]['imageUrl'],
+                                  'title': doc['items'][0]['name'],
+                                  'date': (doc['date'] as Timestamp)
+                                      .toDate()
+                                      .toString(),
+                                  'category': doc['items'][0]['category'],
+                                })
+                            .toList();
+
+                    List<Map<String, dynamic>> filteredItems =
+                        selectedCategory == 'All'
+                            ? historyItems
+                            : historyItems
+                                .where((item) =>
+                                    item['category'] == selectedCategory)
+                                .toList();
+
+                    return ListView(
+                      children: filteredItems.map((item) {
+                        return HistoryItem(
+                          imageUrl: item['imageUrl']!,
+                          title: item['title']!,
+                          date: item['date']!,
+                          category: item['category']!,
+                        );
+                      }).toList(),
                     );
-                  }).toList(),
+                  },
                 ),
               ),
             ],

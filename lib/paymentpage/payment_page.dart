@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uas/models/CartItem.dart';
+import 'package:uas/paymentpage/success_page.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
@@ -306,12 +307,16 @@ class _PaymentPageState extends State<PaymentPage> {
       Fluttertoast.showToast(
         msg: "Payment Successful!",
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
+        gravity: ToastGravity.TOP,
         backgroundColor: Colors.green,
         textColor: Colors.white,
       );
 
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SuccessPage(),
+          ));
     }
   }
 
