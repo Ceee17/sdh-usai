@@ -75,6 +75,7 @@ void showItemDetails(BuildContext context, Item item) {
                       price: item.price,
                       quantity: 1,
                       foodZone: item.zone,
+                      category: item.category,
                     ));
                   }
 

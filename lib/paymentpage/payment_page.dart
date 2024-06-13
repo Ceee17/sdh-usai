@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uas/models/CartItem.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
+  final List<CartItem> cartItems;
 
-  const PaymentPage({super.key, required this.totalPrice});
+  const PaymentPage(
+      {super.key, required this.totalPrice, required this.cartItems});
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -13,6 +18,7 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   int _selectedPaymentMethod = 1;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -246,7 +252,8 @@ class _PaymentPageState extends State<PaymentPage> {
               height: height * 0.06,
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle proceed payment tap
+                  _handleProceedPayment(
+                      context, numberFormat.format(finalPrice));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
@@ -268,5 +275,64 @@ class _PaymentPageState extends State<PaymentPage> {
         ],
       ),
     );
+  }
+
+  void _handleProceedPayment(BuildContext context, String finalPrice) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final paymentMethodLabel = _getPaymentMethodLabel(_selectedPaymentMethod);
+
+      final historyData = {
+        'userId': userId,
+        'paymentMethod': paymentMethodLabel,
+        'items': widget.cartItems
+            .map((item) => {
+                  'name': item.name,
+                  'quantity': item.quantity,
+                  'price': item.price,
+                  'imageUrl': item.imageUrl,
+                  'foodZone': item.foodZone,
+                  'category': item.category,
+                })
+            .toList(),
+        'totalPrice': widget.totalPrice,
+        'finalPrice': finalPrice,
+        'date': Timestamp.now(),
+      };
+
+      await FirebaseFirestore.instance.collection('history').add(historyData);
+
+      Fluttertoast.showToast(
+        msg: "Payment Successful!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+      );
+
+      Navigator.pop(context);
+    }
+  }
+
+  String _getPaymentMethodLabel(int method) {
+    switch (method) {
+      case 1:
+        return 'qris';
+      case 2:
+        return 'bca';
+      case 3:
+        return 'atm bersama';
+      case 4:
+        return 'gopay';
+      case 5:
+        return 'ovo';
+      case 6:
+        return 'dana';
+      case 7:
+        return 'linkaja';
+      default:
+        return 'unknown';
+    }
   }
 }
