@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/accountpage/edit_profile_page.dart';
 import 'package:uas/auth/auth_service.dart';
-import 'package:uas/auth/login_page.dart';
-import 'package:uas/widgets/button.dart';
+import 'package:uas/routes.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -114,24 +112,10 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                       Divider(),
                       ListTile(
-                        title: Text('Payments'),
-                        onTap: () {
-                          // Navigate to Payments screen
-                        },
-                        enabled: false,
-                      ),
-                      Divider(),
-                      ListTile(
                         title: Text('About Us'),
                         onTap: () {
-                          // Navigate to Customer Services screen
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AboutUsPage(),
-                              ));
+                          navigateToAboutUsPage(context);
                         },
-                        // enabled: false,
                       ),
                       Divider(),
                       ListTile(
@@ -149,7 +133,7 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                         onTap: () async {
                           await _auth.signout();
-                          _navigateToLoginPage(context);
+                          navigateToLoginPage(context);
                         },
                       ),
                     ],
@@ -160,14 +144,6 @@ class _AccountPageState extends State<AccountPage> {
           );
         },
       ),
-    );
-  }
-
-  void _navigateToLoginPage(BuildContext context) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-      (route) => false,
     );
   }
 

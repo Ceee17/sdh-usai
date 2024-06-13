@@ -23,34 +23,16 @@ class CustomButton extends StatelessWidget {
 }
 
 // PRIMARY BUTTON
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton(
-      {super.key, required this.label, this.onPressed, this.color});
-  final String label;
-  final void Function()? onPressed;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
+Container PrimaryBtn(String text) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    decoration: primaryBtnBox,
+    child: Center(
       child: Text(
-        label,
+        text,
         style: primaryBtnText,
       ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return color;
-            }
-            return color;
-          },
-        ),
-        minimumSize: MaterialStateProperty.all<Size>(
-          Size(double.infinity, 50),
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }

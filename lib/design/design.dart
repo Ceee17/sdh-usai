@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 Color primaryColor = Color(0xFFFFA62F);
 Color white = Colors.white;
 Color grey = Colors.grey;
+Color grey600 = Colors.grey.shade600;
 Color black = Colors.black;
 Color red = Colors.red;
+Color green = Colors.green;
 
 // TextStyling
 TextStyle appBar = TextStyle(
@@ -46,12 +48,12 @@ TextStyle primaryBtnText = TextStyle(
 
 TextStyle priceText = TextStyle(
   fontSize: 16,
-  color: grey,
+  color: grey600,
 );
 
 TextStyle descText = TextStyle(
   fontSize: 14,
-  color: grey,
+  color: grey600,
 );
 
 TextStyle warningText = TextStyle(

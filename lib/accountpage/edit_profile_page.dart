@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'dart:io';
 
+import 'package:uas/design/design.dart';
+
 Color primaryColor = Color(0xFFFFA62F);
 
 class EditProfilePage extends StatefulWidget {
@@ -93,7 +95,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: Text(
+          'Edit Profile',
+          style: appBar,
+        ),
         centerTitle: true,
       ),
       body: Stack(
@@ -115,7 +120,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     onPressed: isLoading ? null : _pickImage,
                     child: Text('Change Picture'),
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   TextFormField(
                     controller: fullNameController,
                     decoration: InputDecoration(
@@ -129,7 +134,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -146,7 +151,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   TextFormField(
                     controller: phoneController,
                     decoration: InputDecoration(
@@ -162,7 +167,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(
@@ -176,7 +181,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   TextFormField(
                     controller: passwordController,
                     decoration: InputDecoration(
@@ -234,7 +239,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               }
                             }
                           },
-                    child: Text('Update'),
+                    child: Text(
+                      'Update',
+                      style: primaryBtnText,
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: primaryColor,
                       minimumSize: Size(double.infinity, 50),
