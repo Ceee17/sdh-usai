@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uas/wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uas/auth/login_page.dart';
 
 class StartingPage extends StatelessWidget {
   const StartingPage({super.key});

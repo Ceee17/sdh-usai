@@ -5,8 +5,10 @@ import 'package:uas/design/design.dart';
 import 'package:uas/listdata/food_data.dart';
 import 'package:uas/listdata/zone_data.dart';
 import 'package:uas/models/CartFood.dart';
+import 'package:uas/models/FeaturedCardData.dart';
 import 'package:uas/models/Food.dart';
 import 'package:uas/models/Zone.dart';
+import 'package:uas/routes.dart';
 import 'package:uas/widgets/button.dart';
 
 // FOOD DETAILS MODAL
@@ -56,7 +58,7 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                     break;
                   }
                   if (matchingZone != null) {
-                    matchingZone.onTap(context);
+                    matchingZone.onTap!(context);
                   }
                 }
 
@@ -70,7 +72,7 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                     category: food.category,
                   ));
                   if (matchingZone != null) {
-                    matchingZone.onTap(context);
+                    matchingZone.onTap!(context);
                   }
                 }
 
@@ -102,7 +104,7 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
+                child: Image.asset(
                   food.image,
                   width: double.infinity,
                   height: 300,
@@ -165,7 +167,7 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
 }
 
 // ZONE DETAILS MODAL
-void showZoneDetails(BuildContext context, Zone zone) {
+void showZoneDetails(BuildContext context, Zone zone, String title) {
   final formattedPrice = NumberFormat.decimalPattern('id');
   final formattedStartPrice = formattedPrice.format(priceStart);
   final formattedEndPrice = formattedPrice.format(priceEnd);
@@ -183,7 +185,7 @@ void showZoneDetails(BuildContext context, Zone zone) {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.network(
+                child: Image.asset(
                   zone.image,
                   width: double.infinity,
                   height: 300,
@@ -207,7 +209,34 @@ void showZoneDetails(BuildContext context, Zone zone) {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  DateTime? selectedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                    selectableDayPredicate: (DateTime day) {
+                      return day.isAfter(
+                          DateTime.now().subtract(const Duration(days: 1)));
+                    },
+                    builder: (BuildContext context, Widget? child) {
+                      return Theme(
+                        data: ThemeData.light().copyWith(
+                          colorScheme: ColorScheme.light(
+                            primary: primaryColor,
+                            onPrimary: white,
+                            onSurface: black,
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                  );
+                  if (selectedDate != null) {
+                    navigateToTicketOrderDetailPage(
+                        context, title, selectedDate);
+                  }
+                },
                 child: PrimaryBtn('Select Date'),
               ),
             ],
@@ -217,3 +246,83 @@ void showZoneDetails(BuildContext context, Zone zone) {
     },
   );
 }
+
+void showFeaturedDetails(
+    BuildContext context, FeaturedCardData featured, String title) {
+  final formattedPrice =
+      NumberFormat.decimalPattern('id').format(featured.price);
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      return FractionallySizedBox(
+        heightFactor: 0.7,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  featured.imageUrl,
+                  width: double.infinity,
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              h(20),
+              Text(featured.title, style: clipText),
+              h(14),
+              Text("Rp. $formattedPrice,00", style: priceText),
+              h(10),
+              Text(featured.description, style: descText),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  // showCalendarModal(context, title);
+                },
+                child: PrimaryBtn(featured.title),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+// CALENDAR MODAL
+// void showCalendarModal(BuildContext context, String title) {
+//   showModalBottomSheet(
+//     context: context,
+//     isScrollControlled: true,
+//     backgroundColor: Colors.transparent,
+//     builder: (context) {
+//       return DraggableScrollableSheet(
+//         expand: false,
+//         initialChildSize: 0.7,
+//         maxChildSize: 0.7,
+//         minChildSize: 0.3,
+//         builder: (context, scrollController) {
+//           return Container(
+//             decoration: BoxDecoration(
+//               color: white,
+//               borderRadius:
+//                   const BorderRadius.vertical(top: Radius.circular(20)),
+//             ),
+//             padding: const EdgeInsets.all(16),
+//             child: Column(
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Text('Select Date', style: clipText),
+//                 h(16),
+//               ],
+//             ),
+//           );
+//         },
+//       );
+//     },
+//   );
+// }

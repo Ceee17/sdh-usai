@@ -47,7 +47,10 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Search', style: appBar),
+        title: Text(
+          'Search',
+          style: appBar,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -77,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
                         textAlign: TextAlign.center,
                       ),
                     )
-                  : buildSearchGrid(context, _filteredItems),
+                  : buildItemGrid(context, _filteredItems),
             ),
           ],
         ),

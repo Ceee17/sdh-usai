@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:uas/aboutus/about_us_page.dart';
 import 'package:uas/auth/login_page.dart';
+import 'package:uas/auth/register_page.dart';
 import 'package:uas/homepage/home_page.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/orderfoodpage/bird_zone_page.dart';
@@ -10,7 +11,32 @@ import 'package:uas/orderfoodpage/food_cart_page.dart';
 import 'package:uas/orderfoodpage/forest_zone_page.dart';
 import 'package:uas/orderfoodpage/sea_zone_page.dart';
 import 'package:uas/orderticketpage/ticket_order_page.dart';
+import 'package:uas/orderticketpage/ticket_orderdetail_page.dart';
 import 'package:uas/paymentpage/payment_page.dart';
+
+// LOGIN ROUTES
+void navigateToSignup(BuildContext context) => Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: offsetAnimation,
+              child: RegisterPage(), // Placeholder for SignupPage
+            ),
+          );
+        },
+        transitionDuration: Duration(milliseconds: 850),
+      ),
+    );
 
 // HOMEPAGE ROUTES
 void navigateToHomePage(BuildContext context) {
@@ -47,6 +73,20 @@ void navigateToAboutUsPage(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => AboutUsPage()),
+  );
+}
+
+// TICKET ROUTES
+void navigateToTicketOrderDetailPage(
+    BuildContext context, String title, DateTime date) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => TicketOrderDetailPage(
+        title: title,
+        selectedDate: date,
+      ),
+    ),
   );
 }
 
@@ -123,6 +163,7 @@ void navigateToForestCart(BuildContext context) {
   );
 }
 
+// PAYMENT ROUTES
 void navigateToPaymentPage(BuildContext context, String totalPrice,
     List<Map<String, dynamic>> foodItems) {
   List<CartFood> cartItems = foodItems.map((item) {
