@@ -9,7 +9,7 @@ final int? priceEndCS = null;
 
 final List<Zone> zoneData = [
   Zone(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/zone/jungleexpedition.jpg',
     title: 'Jungle Expedition',
     priceStart: priceStart,
     priceEnd: priceEnd,
@@ -22,7 +22,7 @@ final List<Zone> zoneData = [
     zone: 'fauna',
   ),
   Zone(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/zone/underwaterparadise.jpg',
     title: 'Underwater Paradise',
     priceStart: priceStart,
     priceEnd: priceEnd,
@@ -35,7 +35,7 @@ final List<Zone> zoneData = [
     zone: 'sea',
   ),
   Zone(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/zone/skysanctuary.jpg',
     title: 'Sky Sanctuary',
     priceStart: priceStart,
     priceEnd: priceEnd,
@@ -48,7 +48,7 @@ final List<Zone> zoneData = [
     zone: 'bird',
   ),
   Zone(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/zone/spookyforest.jpg',
     title: 'Spooky Forest',
     priceStart: priceStart,
     priceEnd: priceEnd,

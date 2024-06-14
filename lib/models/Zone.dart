@@ -8,7 +8,7 @@ class Zone implements Searchable {
   final String title;
   final int? priceStart;
   final int? priceEnd;
-  final void Function(BuildContext context) onTap;
+  final void Function(BuildContext context)? onTap;
   final String category;
   final String description;
   final String zone;
@@ -18,7 +18,7 @@ class Zone implements Searchable {
     required this.title,
     this.priceStart,
     this.priceEnd,
-    required this.onTap,
+    this.onTap,
     required this.category,
     required this.description,
     required this.zone,

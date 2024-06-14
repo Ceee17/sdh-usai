@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/models/Food.dart';
+import 'package:uas/models/History.dart';
 import 'package:uas/models/Review.dart';
 import 'package:uas/models/Zone.dart';
 import 'package:uas/routes.dart';
@@ -149,7 +150,7 @@ class _ZoneCardState extends State<ZoneCard> {
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0),
                 ),
-                child: Image.network(
+                child: Image.asset(
                   widget.zone.image,
                   width: double.infinity,
                   height: 130,
@@ -222,7 +223,7 @@ class _FoodCardState extends State<FoodCard> {
                 child: ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(10)),
-                  child: Image.network(
+                  child: Image.asset(
                     widget.food.image,
                     width: double.infinity,
                     height: 130,
@@ -274,7 +275,7 @@ Widget buildCartFoodCard(CartFood item, Function _updateQuantity) {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
+              child: Image.asset(
                 item.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
@@ -329,31 +330,30 @@ Widget buildCartFoodCard(CartFood item, Function _updateQuantity) {
 }
 
 // HISTORY CARD
-class HistoryItem extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String date;
-  final String category;
-  final String finalPrice; // Add this line
-  final String paymentMethod; // Add this line
+class HistoryItemCard extends StatelessWidget {
+  final HistoryItem historyItem;
 
-  const HistoryItem({
-    required this.imageUrl,
-    required this.title,
-    required this.date,
-    required this.category,
-    required this.finalPrice, // Add this line
-    required this.paymentMethod, // Add this line
-  });
+  HistoryItemCard({required this.historyItem});
 
   @override
   Widget build(BuildContext context) {
+    final double imageWidth = 50; // Ubah sesuai kebutuhan
+    final double imageHeight = 100; // Ubah sesuai kebutuhan
+    final double borderRadius = 6.0; // Ubah sesuai kebutuhan
+
     return Card(
       child: ListTile(
-        leading: Image.network(imageUrl),
-        title: Text(title),
-        subtitle: Text("$date\n$finalPrice\n$paymentMethod"),
-        trailing: Text(category),
+        leading: Container(
+          width: imageWidth,
+          height: imageHeight,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: Image.asset(historyItem.imageUrl, fit: BoxFit.contain),
+          ),
+        ),
+        title: Text(historyItem.title),
+        subtitle: Text(
+            "${historyItem.date}\n${historyItem.finalPrice}\n${historyItem.paymentMethod}"),
       ),
     );
   }
@@ -401,7 +401,7 @@ Widget SearchCard(String title, String imagePath, String category,
         Expanded(
           child: ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-            child: Image.network(
+            child: Image.asset(
               imagePath,
               width: double.infinity,
               height: 130,
@@ -434,6 +434,36 @@ Widget SearchCard(String title, String imagePath, String category,
                   ),
                 ),
             ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget FeaturedCard(String imageUrl, String title) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+          child: Image.asset(
+            imageUrl,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned(
+          bottom: 16.0,
+          left: 16.0,
+          child: Text(
+            title,
+            style: cardText,
           ),
         ),
       ],

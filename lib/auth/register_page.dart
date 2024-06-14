@@ -298,7 +298,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     'Log in',
                                     style: TextStyle(
                                       color: Color(0xff8da2e2),
-                                      fontSize: width * 0.035,
+                                      fontSize: width * 0.040,
                                     ),
                                   ),
                                 ),

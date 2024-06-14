@@ -7,17 +7,43 @@ import 'package:uas/widgets/card.dart';
 import 'package:uas/widgets/modal.dart';
 
 // ZONELIST GRID
-Widget buildZoneGrid(BuildContext context, List<Zone> zones) {
+Widget buildZoneGrid(
+    BuildContext context, List<Zone> zones, String sourcePage) {
+  if (sourcePage == 'ticketPage') {
+    return buildTicketZoneGrid(context, zones);
+  } else {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      gridDelegate: GridFixedCrossAxisCount(2, 1, 10, 10),
+      itemCount: zones.length,
+      itemBuilder: (context, int index) {
+        return GestureDetector(
+          onTap: () => zones[index].onTap!(context),
+          child: ZoneCard(
+            zone: zones[index],
+          ),
+        );
+      },
+    );
+  }
+}
+
+Widget buildTicketZoneGrid(BuildContext context, List<Zone> zones) {
   return GridView.builder(
     shrinkWrap: true,
-    physics: const AlwaysScrollableScrollPhysics(),
-    gridDelegate: GridFixedCrossAxisCount(2, 1, 10, 10),
+    physics: const NeverScrollableScrollPhysics(),
+    gridDelegate: GridFixedCrossAxisCount(2, 0.8, 10, 10),
     itemCount: zones.length,
     itemBuilder: (context, int index) {
       return GestureDetector(
-        onTap: () => zones[index].onTap(context),
-        child: ZoneCard(
-          zone: zones[index],
+        onTap: () => showZoneDetails(context, zones[index], zones[index].title),
+        child: SearchCard(
+          zones[index].title,
+          zones[index].image,
+          'ticket',
+          priceStart: zones[index].priceStart,
+          priceEnd: zones[index].priceEnd,
         ),
       );
     },
@@ -42,7 +68,8 @@ Widget buildFoodGrid(BuildContext context, List<Food> food) {
   );
 }
 
-Widget buildSearchGrid(BuildContext context, List<Searchable> filteredItems) {
+// SEARCHLIST GRID
+Widget buildItemGrid(BuildContext context, List<Searchable> filteredItems) {
   return GridView.builder(
     shrinkWrap: true,
     physics: const AlwaysScrollableScrollPhysics(),
@@ -52,7 +79,7 @@ Widget buildSearchGrid(BuildContext context, List<Searchable> filteredItems) {
       final item = filteredItems[index];
       if (item is Zone) {
         return GestureDetector(
-          onTap: () => showZoneDetails(context, item),
+          onTap: () => showZoneDetails(context, item, item.title),
           child: SearchCard(
             item.title,
             item.image,

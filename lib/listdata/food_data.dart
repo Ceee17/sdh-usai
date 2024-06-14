@@ -10,7 +10,7 @@ List<Food> filterFoodByZone(String zone) {
 final List<Food> Foods = [
   // FAUNA
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/junglejambalaya.jpg',
     title: 'Jungle Jambalaya',
     price: 75000,
     description:
@@ -19,7 +19,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/wildlifewrap.jpg',
     title: 'Wildlife Wrap',
     price: 45000,
     description:
@@ -28,7 +28,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/savannahsalad.jpg',
     title: 'Savannah Salad',
     price: 50000,
     description:
@@ -37,7 +37,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/safarismoothies.jpg',
     title: 'Safari Smoothies',
     price: 35000,
     description:
@@ -48,7 +48,7 @@ final List<Food> Foods = [
 
   // SEA
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/oceanbreezesalad.jpg',
     title: 'Ocean Breeze Salad',
     price: 50000,
     description:
@@ -57,7 +57,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/seafoodpaella.jpg',
     title: 'Seafood Paella',
     price: 72000,
     description:
@@ -66,7 +66,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/salmonsandwich.jpg',
     title: 'Salmon Sandwich',
     price: 85000,
     description:
@@ -75,7 +75,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/tropicalfruitbowl.jpg',
     title: 'Tropical Fruit Bowl',
     price: 45000,
     description:
@@ -86,7 +86,7 @@ final List<Food> Foods = [
 
   // BIRD
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/avocadotoast.jpg',
     title: 'Avian Avocado Toast',
     price: 45000,
     description:
@@ -95,7 +95,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/featheredtacos.jpg',
     title: 'Feathered Tacos',
     price: 30000,
     description:
@@ -104,7 +104,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/birdnestpasta.jpeg',
     title: "Bird's Nest Pasta",
     price: 75000,
     description:
@@ -113,7 +113,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/parrotparfait.jpg',
     title: 'Parrot Parfait',
     price: 45000,
     description:
@@ -124,7 +124,7 @@ final List<Food> Foods = [
 
   // FOREST
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/witchbrewsoup.jpg',
     title: "Witch's Brew Soup",
     price: 45000,
     description:
@@ -133,7 +133,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/ghostlyshrimp.jpg',
     title: 'Ghostly Shrimp',
     price: 60000,
     description:
@@ -142,7 +142,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/mysticalmushroomrisotto.jpg',
     title: 'Mystical Mushroom Risotto',
     price: 55000,
     description: 'Creamy risotto with a mix of wild mushrooms and truffle oil.',
@@ -150,7 +150,7 @@ final List<Food> Foods = [
     category: 'food',
   ),
   Food(
-    image: 'https://via.placeholder.com/150',
+    image: 'assets/food/hauntedhousebrownies.jpg',
     title: 'Haunted House Brownies',
     price: 35000,
     description:
