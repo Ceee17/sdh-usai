@@ -90,19 +90,24 @@ class _HistoryPageState extends State<HistoryPage> {
                         snapshot.data!.docs.map((doc) {
                       var items = List<Map<String, dynamic>>.from(doc['items']);
                       String imageUrl;
-                      if (items[0]['category'] == 'ticket') {
-                        imageUrl = 'assets/ticketIcon.png';
-                      } else if (items[0]['category'] == 'food') {
-                        imageUrl = 'assets/foodIcon.png';
+                      if (items.isNotEmpty) {
+                        if (items[0]['category'] == 'ticket') {
+                          imageUrl = 'assets/ticketIcon.png';
+                        } else if (items[0]['category'] == 'food') {
+                          imageUrl = 'assets/foodIcon.png';
+                        } else {
+                          imageUrl = items[0]['imageUrl'] ?? '';
+                        }
                       } else {
-                        imageUrl = items[0]['imageUrl'];
+                        imageUrl = '';
                       }
                       return {
                         'imageUrl': imageUrl,
-                        'title': items[0]['name'],
-                        'category': items[0]['category'],
-                        'finalPrice': doc['finalPrice'],
-                        'paymentMethod': doc['paymentMethod'],
+                        'title': items.isNotEmpty ? items[0]['name'] ?? '' : '',
+                        'category':
+                            items.isNotEmpty ? items[0]['category'] ?? '' : '',
+                        'finalPrice': doc['finalPrice'] ?? '',
+                        'paymentMethod': doc['paymentMethod'] ?? '',
                         'date': (doc['date'] as Timestamp).toDate().toString(),
                       };
                     }).toList();

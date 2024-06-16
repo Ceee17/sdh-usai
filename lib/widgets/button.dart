@@ -36,3 +36,17 @@ Container PrimaryBtn(String text) {
     ),
   );
 }
+
+Container PrimaryBtnDisabled(String text) {
+  return Container(
+    width: double.infinity,
+    padding: const EdgeInsets.symmetric(vertical: 15),
+    decoration: primaryBtnBoxisabled,
+    child: Center(
+      child: Text(
+        text,
+        style: primaryBtnTextDisabled,
+      ),
+    ),
+  );
+}

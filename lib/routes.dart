@@ -78,13 +78,14 @@ void navigateToAboutUsPage(BuildContext context) {
 
 // TICKET ROUTES
 void navigateToTicketOrderDetailPage(
-    BuildContext context, String title, DateTime date) {
+    BuildContext context, String title, DateTime date, String category) {
   Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => TicketOrderDetailPage(
         title: title,
         selectedDate: date,
+        category: category,
       ),
     ),
   );
@@ -165,21 +166,20 @@ void navigateToForestCart(BuildContext context) {
 
 // PAYMENT ROUTES
 void navigateToPaymentPage(BuildContext context, String totalPrice,
-    List<Map<String, dynamic>> foodItems) {
-  List<CartFood> cartItems = foodItems.map((item) {
-    // Check for null values and provide defaults if necessary
+    List<Map<String, dynamic>> Items, String sourcePage) {
+  List<CartFood> cartItems = Items.map((item) {
     String name = item['name'] ?? 'Unknown';
-    String imageUrl = item['imageUrl'] ?? '';
     int price = item['price'] ?? 0;
     int quantity = item['quantity'] ?? 0;
+    String imageUrl = item['imageUrl'] ?? '';
     String foodZone = item['foodZone'] ?? '';
     String category = item['category'] ?? '';
 
     return CartFood(
       name: name,
-      imageUrl: imageUrl,
       price: price,
       quantity: quantity,
+      imageUrl: imageUrl,
       foodZone: foodZone,
       category: category,
     );
@@ -191,6 +191,7 @@ void navigateToPaymentPage(BuildContext context, String totalPrice,
       builder: (context) => PaymentPage(
         totalPrice: totalPrice,
         cartItems: cartItems,
+        sourcePage: '',
       ),
     ),
   );

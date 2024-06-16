@@ -4,15 +4,31 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uas/listdata/payment_list_data.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/paymentpage/success_page.dart';
+import 'package:uas/widgets/button.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
-  final List<CartFood> cartItems;
+  final List<CartFood>? cartItems;
+  final List<Map<String, dynamic>>? zoneItems;
+  final String sourcePage;
 
-  const PaymentPage(
-      {super.key, required this.totalPrice, required this.cartItems});
+  const PaymentPage({
+    super.key,
+    required this.totalPrice,
+    this.cartItems,
+    this.zoneItems,
+    required this.sourcePage,
+  }) : assert(
+            (sourcePage == 'ticket' &&
+                    zoneItems != null &&
+                    cartItems == null) ||
+                (sourcePage != 'ticket' &&
+                    cartItems != null &&
+                    zoneItems == null),
+            'For tickets, zoneItems must be provided and cartItems must be null. For non-tickets, cartItems must be provided and zoneItems must be null.');
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -53,14 +69,14 @@ class _PaymentPageState extends State<PaymentPage> {
                   Container(
                     padding: EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: white,
                       borderRadius: BorderRadius.circular(8.0),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
+                          color: grey.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3), // changes position of shadow
+                          offset: Offset(0, 3),
                         ),
                       ],
                     ),
@@ -73,19 +89,14 @@ class _PaymentPageState extends State<PaymentPage> {
                               Icons.shopping_bag,
                               size: 50,
                             ),
-                            SizedBox(width: 16.0),
+                            w(16.0),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Checkout Summary',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8.0),
+                                  Text('Checkout Summary',
+                                      style: headerText(16)),
+                                  h(8.0),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -103,24 +114,20 @@ class _PaymentPageState extends State<PaymentPage> {
                                       Text(numberFormat.format(tax)),
                                     ],
                                   ),
-                                  Divider(), // Add Divider here
+                                  Divider(),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         'Total Price',
-                                        style: TextStyle(
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: customText(
+                                            14, FontWeight.bold, primaryColor),
                                       ),
                                       Text(
                                         numberFormat.format(finalPrice),
-                                        style: TextStyle(
-                                          color: Colors.orange,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: customText(
+                                            14, FontWeight.bold, primaryColor),
                                       ),
                                     ],
                                   ),
@@ -129,77 +136,29 @@ class _PaymentPageState extends State<PaymentPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16.0),
+                        h(16.0),
                         GestureDetector(
                           onTap: () {
-                            // Handle order details tap
                             Navigator.pop(context);
                           },
                           child: Text(
                             'Order details',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
-                            ),
+                            style: linkText,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 16.0),
-                  Text(
-                    'Payment Method',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  h(16.0),
+                  Text('Payment Method', style: headerText(16)),
                   Expanded(
                     child: SingleChildScrollView(
                       child: ListView.separated(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: 7,
+                        itemCount: paymentMethods.length,
                         separatorBuilder: (context, index) => Divider(),
                         itemBuilder: (context, index) {
-                          final paymentMethods = [
-                            {
-                              'label': 'QRIS',
-                              'image': 'assets/payment/qris.png',
-                              'value': 1
-                            },
-                            {
-                              'label': 'BCA',
-                              'image': 'assets/payment/bca.png',
-                              'value': 2
-                            },
-                            {
-                              'label': 'ATM Bersama',
-                              'image': 'assets/payment/atm.png',
-                              'value': 3
-                            },
-                            {
-                              'label': 'Gopay',
-                              'image': 'assets/payment/gopay.png',
-                              'value': 4
-                            },
-                            {
-                              'label': 'OVO',
-                              'image': 'assets/payment/ovo.png',
-                              'value': 5
-                            },
-                            {
-                              'label': 'Dana',
-                              'image': 'assets/payment/dana.png',
-                              'value': 6
-                            },
-                            {
-                              'label': 'LinkAja',
-                              'image': 'assets/payment/linkaja.png',
-                              'value': 7
-                            },
-                          ];
-
                           return GestureDetector(
                             onTap: () {
                               setState(() {
@@ -250,19 +209,12 @@ class _PaymentPageState extends State<PaymentPage> {
                       context, numberFormat.format(finalPrice));
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                child: Text(
-                  'Proceed Payment',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+                child: PrimaryBtn('Proceed Payment'),
               ),
             ),
           ),
@@ -280,16 +232,30 @@ class _PaymentPageState extends State<PaymentPage> {
       final historyData = {
         'userId': userId,
         'paymentMethod': paymentMethodLabel,
-        'items': widget.cartItems
-            .map((item) => {
-                  'name': item.name,
-                  'quantity': item.quantity,
-                  'price': item.price,
-                  'imageUrl': item.imageUrl,
-                  'foodZone': item.foodZone,
-                  'category': item.category,
-                })
-            .toList(),
+        'items': widget.sourcePage == 'ticket'
+            ? widget.zoneItems!
+                .map((item) => {
+                      'title': item['title'],
+                      'selectedDate': item['selectedDate'],
+                      'adultCount': item['adultCount'],
+                      'kidsCount': item['kidsCount'],
+                      'adultPrice': item['adultPrice'],
+                      'kidsPrice': item['kidsPrice'],
+                      'totalPrice': item['totalPrice'],
+                      'totalCount': item['totalCount'],
+                      'category': item['category'],
+                    })
+                .toList()
+            : widget.cartItems!
+                .map((item) => {
+                      'name': item.name,
+                      'price': item.price,
+                      'quantity': item.quantity,
+                      'imageUrl': item.imageUrl,
+                      'foodZone': item.foodZone,
+                      'category': item.category,
+                    })
+                .toList(),
         'totalPrice': widget.totalPrice,
         'finalPrice': finalPrice,
         'date': Timestamp.now(),
@@ -301,8 +267,8 @@ class _PaymentPageState extends State<PaymentPage> {
         msg: "Payment Successful!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.TOP,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
+        backgroundColor: green,
+        textColor: white,
       );
 
       Navigator.pushReplacement(

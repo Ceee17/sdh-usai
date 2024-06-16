@@ -24,8 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    vidController =
-        VideoPlayerController.asset('assets/videos/placeholdervideo.mp4');
+    vidController = VideoPlayerController.asset('assets/videos/intro.mp4');
     _initializeVideoPlayerFuture = vidController.initialize().then((_) {
       vidController.play();
     }).catchError((error) {
@@ -120,6 +119,7 @@ class _HomePageState extends State<HomePage> {
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
+                    vidController.pause();
                   },
                   child: PrimaryBtn('Proceed'),
                 ),
