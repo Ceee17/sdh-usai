@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uas/accountpage/account_page.dart';
-import 'package:uas/homepage/home_page.dart';
+import 'package:uas/design/design.dart';
 
 class AboutUsPage extends StatefulWidget {
   const AboutUsPage({super.key});
@@ -15,31 +14,31 @@ class _AboutUsPage extends State<AboutUsPage> {
         name: 'Jafier Andreas',
         id: '535220013',
         initials: 'JA',
-        qrCodePath: 'assets/qrmember/linkjafier.png',
+        qrCodePath: 'assets/qrmember/linkJafier.png',
         link: 'Discord : https://s.id/26VYj'),
     Member(
         name: 'Nelson',
         id: '535220021',
         initials: 'NL',
-        qrCodePath: 'assets/qrmember/linknelson.png',
+        qrCodePath: 'assets/qrmember/linkNelson.png',
         link: 'Instagram : https://s.id/26VY9'),
     Member(
         name: 'Jessen Chayadi',
         id: '535220023',
         initials: 'JC',
-        qrCodePath: 'assets/qrmember/linkjc.png',
+        qrCodePath: 'assets/qrmember/linkJC.png',
         link: 'LinkedIn : https://s.id/26VY8'),
     Member(
         name: 'Finnia Li',
         id: '535220030',
         initials: 'FL',
-        qrCodePath: 'assets/qrmember/linkfinnia.png',
+        qrCodePath: 'assets/qrmember/linkFinnia.png',
         link: 'Instagram : https://s.id/26VYm'),
     Member(
         name: 'Timoty Wahyudi P',
         id: '535220043',
         initials: 'TP',
-        qrCodePath: 'assets/qrmember/linktimot.png',
+        qrCodePath: 'assets/qrmember/linkTimot.png',
         link: 'WhatsApp : https://s.id/26VYe'),
   ];
 
@@ -47,22 +46,11 @@ class _AboutUsPage extends State<AboutUsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 0,
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const AccountPage(),
-              ),
-            );
-          },
+        title: Text(
+          'About Us',
+          style: appBar,
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -129,7 +117,9 @@ class MemberTile extends StatelessWidget {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text(member.name),
+                title: Center(
+                  child: Text(member.name),
+                ),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -164,10 +154,4 @@ class MemberTile extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: AboutUsPage(),
-  ));
 }
