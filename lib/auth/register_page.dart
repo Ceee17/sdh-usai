@@ -44,24 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            // Background text
-            Container(
-              padding: EdgeInsets.all(0.0),
-              child: Center(
-                child: Align(
-                  alignment: Alignment(-0.85, -0.38),
-                  child: Text(
-                    'Create your Flashccount',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // Foreground content
             Positioned(
               top: height * 0.05,
               left: 0,
@@ -70,7 +52,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Centered Image
                   Align(
                     alignment: Alignment.topCenter,
                     child: Image.asset(
@@ -79,13 +60,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: height * 0.2,
                     ),
                   ),
-                  // Left-aligned Text
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.1),
                       child: Text(
-                        'Create your ...',
+                        'Create your JungleFeast Account',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w900,
@@ -98,13 +78,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-            // Form container
             Positioned(
               bottom: -20,
               left: 0,
               right: 0,
               child: Container(
-                height: height * 0.7, // Adjust height relative to screen size
+                height: height * 0.7,
                 decoration: BoxDecoration(
                   color: Color(0xffffffff),
                   borderRadius: BorderRadius.only(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uas/models/Zone.dart';
 import 'package:uas/routes.dart';
 
-final int priceStart = 100000;
+final int priceStart = 200000;
 final int priceEnd = 300000;
 final int? priceStartCS = null;
 final int? priceEndCS = null;

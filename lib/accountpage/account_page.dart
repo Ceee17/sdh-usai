@@ -158,7 +158,6 @@ class _AccountPageState extends State<AccountPage> {
       context,
       MaterialPageRoute(builder: (context) => EditProfilePage()),
     ).then((value) {
-      // Reload the page after returning from EditProfilePage
       setState(() {});
     });
   }

@@ -167,7 +167,8 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
 }
 
 // ZONE DETAILS MODAL
-void showZoneDetails(BuildContext context, Zone zone, String title) {
+void showZoneDetails(
+    BuildContext context, Zone zone, String title, String category) {
   final formattedPrice = NumberFormat.decimalPattern('id');
   final formattedStartPrice = formattedPrice.format(priceStart);
   final formattedEndPrice = formattedPrice.format(priceEnd);
@@ -234,7 +235,7 @@ void showZoneDetails(BuildContext context, Zone zone, String title) {
                   );
                   if (selectedDate != null) {
                     navigateToTicketOrderDetailPage(
-                        context, title, selectedDate);
+                        context, title, selectedDate, category);
                   }
                 },
                 child: PrimaryBtn('Select Date'),

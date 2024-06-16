@@ -37,7 +37,8 @@ Widget buildTicketZoneGrid(BuildContext context, List<Zone> zones) {
     itemCount: zones.length,
     itemBuilder: (context, int index) {
       return GestureDetector(
-        onTap: () => showZoneDetails(context, zones[index], zones[index].title),
+        onTap: () => showZoneDetails(
+            context, zones[index], zones[index].title, zones[index].category),
         child: SearchCard(
           zones[index].title,
           zones[index].image,
@@ -79,7 +80,8 @@ Widget buildItemGrid(BuildContext context, List<Searchable> filteredItems) {
       final item = filteredItems[index];
       if (item is Zone) {
         return GestureDetector(
-          onTap: () => showZoneDetails(context, item, item.title),
+          onTap: () =>
+              showZoneDetails(context, item, item.title, item.category),
           child: SearchCard(
             item.title,
             item.image,

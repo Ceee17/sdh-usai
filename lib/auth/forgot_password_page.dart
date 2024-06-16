@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
+import 'package:uas/design/design.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -27,13 +28,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     final width = size.width;
 
     return Scaffold(
-      // appBar: AppBar(),
       backgroundColor: Color(0xffd9d9d9),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
-            // Background text
-            // Foreground container
             Positioned(
               top: height * 0.0175,
               left: 0,
@@ -65,15 +63,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ],
               ),
             ),
-            // Form container
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
-                height: height * 0.65, // Adjust height relative to screen size
+                height: height * 0.65,
                 decoration: BoxDecoration(
-                  color: Color(0xffffffff),
+                  color: white,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(37.0),
                     topRight: Radius.circular(0.0),
@@ -91,7 +88,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: Colors.black,
+                          color: black,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -105,7 +102,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
-                          fillColor: Color(0xffffffff),
+                          fillColor: white,
                           labelText: 'example@gmail.com',
                         ),
                       ),
@@ -129,8 +126,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFFA62F),
-                          foregroundColor: Colors.white,
+                          backgroundColor: primaryColor,
+                          foregroundColor: white,
                           padding: EdgeInsets.symmetric(
                               horizontal: width * 0.25,
                               vertical: height * 0.01),

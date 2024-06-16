@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Login to your ..',
+                        'Login to your JungleFeast Account',
                         style: TextStyle(
                           fontSize: width * 0.06,
                           fontWeight: FontWeight.w900,
@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
-                          fillColor: Color(0xffffffff),
+                          fillColor: white,
                           labelText: 'Password',
                         ),
                       ),
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Forgot Password?',
                             style: TextStyle(
-                              color: Color(0xff000000),
+                              color: black,
                               fontSize: width * 0.035,
                               fontWeight: FontWeight.w400,
                             ),
@@ -145,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFFFA62F),
-                            foregroundColor: Colors.white,
+                            backgroundColor: primaryColor,
+                            foregroundColor: white,
                             padding: EdgeInsets.symmetric(
                                 horizontal: width * 0.1,
                                 vertical: height * 0.01),
@@ -160,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         '-Or Login with-',
                         style: TextStyle(
-                          color: Color(0xff000000),
+                          color: black,
                         ),
                       ),
                       SizedBox(height: height * 0.01),
@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             'Do not have an account?',
                             style: TextStyle(
-                              color: Color(0xff000000),
+                              color: black,
                             ),
                           ),
                           SizedBox(height: height * 0.001),
@@ -234,9 +234,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: height * 0.05), // Added space
-                      Text('Copyright © 2024 SD-H USAI',
-                          style: customText(13, FontWeight.normal, black)),
+                      SizedBox(height: height * 0.05),
+                      Text('Copyright © 2024 SD-H USAI', style: copyrightText),
                     ],
                   ),
                 ),

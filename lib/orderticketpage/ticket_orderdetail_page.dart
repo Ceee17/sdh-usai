@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
+import 'package:uas/paymentpage/payment_page.dart';
+import 'package:uas/widgets/button.dart';
+import 'package:uas/widgets/card.dart';
 
 class TicketOrderDetailPage extends StatefulWidget {
   final String title;
   final DateTime selectedDate;
+  final String category;
 
-  TicketOrderDetailPage({required this.title, required this.selectedDate});
+  TicketOrderDetailPage(
+      {required this.title,
+      required this.selectedDate,
+      required this.category});
 
   @override
   _TicketOrderDetailPageState createState() => _TicketOrderDetailPageState();
@@ -15,19 +22,17 @@ class TicketOrderDetailPage extends StatefulWidget {
 class _TicketOrderDetailPageState extends State<TicketOrderDetailPage> {
   int adultCount = 0;
   int kidsCount = 0;
-  int under3Count = 0;
 
   static const int adultPrice = 300000;
   static const int kidsPrice = 200000;
-  static const int under3Price = 100000;
 
-  int get totalPrice =>
-      (adultCount * adultPrice) +
-      (kidsCount * kidsPrice) +
-      (under3Count * under3Price);
+  int get totalPrice => (adultCount * adultPrice) + (kidsCount * kidsPrice);
+  int get totalCount => (adultCount + kidsCount);
 
   @override
   Widget build(BuildContext context) {
+    final numberFormat = NumberFormat.decimalPattern('id');
+    final itemPrice = numberFormat.format(totalPrice);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -42,116 +47,82 @@ class _TicketOrderDetailPageState extends State<TicketOrderDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${adultCount + kidsCount + under3Count} Item of ${widget.title} on ${DateFormat.yMMMd().format(widget.selectedDate)}',
+              '$totalCount Item of ${widget.title} on ${DateFormat.yMMMd().format(widget.selectedDate)}',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-            _buildTicketDetail('Adults', adultCount, adultPrice, (newValue) {
+            h(10),
+            TicketDetailCard('Adults', adultCount, adultPrice, (newValue) {
               setState(() {
                 adultCount = newValue;
               });
             }),
-            const SizedBox(height: 10),
-            _buildTicketDetail('Kids', kidsCount, kidsPrice, (newValue) {
+            h(10),
+            TicketDetailCard('Kids', kidsCount, kidsPrice, (newValue) {
               setState(() {
                 kidsCount = newValue;
               });
             }),
-            const SizedBox(height: 10),
-            _buildTicketDetail('<3 Years', under3Count, under3Price,
-                (newValue) {
-              setState(() {
-                under3Count = newValue;
-              });
-            }),
-            const SizedBox(height: 20),
-            Text(
-              'Total Prices = Rp. ${NumberFormat('#,###').format(totalPrice)},00',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle payment logic here
-                },
-                child: const Text('Payment'),
-                style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  backgroundColor: Colors.orange,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTicketDetail(
-      String title, int count, int price, Function(int) onChanged) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Image.network(
-              'https://via.placeholder.com/50', // Placeholder image URL
-              width: 50,
-              height: 50,
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            h(20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Rp. ${NumberFormat('#,###').format(price)},00 /Pax',
-                    style: const TextStyle(color: Colors.grey),
-                  ),
+                  Text('Total Prices',
+                      style: customText(18, FontWeight.w600, black)),
+                  Text('Rp. $itemPrice,00',
+                      style: customText(18, FontWeight.w600, black)),
                 ],
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () {
-                    if (count > 0) {
-                      onChanged(count - 1);
-                    }
-                  },
-                ),
-                Text(
-                  count.toString(),
-                  style: const TextStyle(fontSize: 16),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    onChanged(count + 1);
-                  },
-                ),
-              ],
+            h(20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GestureDetector(
+                onTap: totalCount > 0
+                    ? () {
+                        navigateToPaymentPageFromTicket(
+                          context,
+                          totalPrice.toString(),
+                          [
+                            {
+                              'title': widget.title,
+                              'selectedDate': widget.selectedDate,
+                              'adultCount': adultCount,
+                              'kidsCount': kidsCount,
+                              'adultPrice': adultPrice,
+                              'kidsPrice': kidsPrice,
+                              'totalPrice': totalPrice,
+                              'totalCount': totalCount,
+                              'category': widget.category,
+                            }
+                          ],
+                          'ticket',
+                        );
+                      }
+                    : null,
+                child: totalCount > 0
+                    ? PrimaryBtn('Payment')
+                    : PrimaryBtnDisabled('Payment'),
+              ),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+void navigateToPaymentPageFromTicket(BuildContext context, String totalPrice,
+    List<Map<String, dynamic>> items, String sourcePage) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PaymentPage(
+        totalPrice: totalPrice,
+        zoneItems: items,
+        sourcePage: sourcePage,
+      ),
+    ),
+  );
 }

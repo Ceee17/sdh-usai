@@ -1,48 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:uas/design/design.dart';
 
 class SuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: white,
         elevation: 0,
-        leading: Container(), // Empty container to simulate no leading icon
+        leading: Container(),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Spacer(), // Spacer to push content to the center
+          Spacer(),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  'assets/success.png',
+                  'assets/success.gif',
                   width: 175.0,
                   height: 175.0,
                 ),
-                SizedBox(height: 20.0),
-                Text(
-                  'Payment Success!!!',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 40.0),
+                h(20.0),
+                Text('Payment Success!!!', style: headerText(24)),
+                h(40.0),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate back to the home page or perform another action
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange, // Background color
+                    backgroundColor: primaryColor,
                     padding:
                         EdgeInsets.symmetric(horizontal: 130.0, vertical: 15.0),
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(30.0), // Rounded corners
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
                     textStyle: TextStyle(
                       fontSize: 18.0,
@@ -51,23 +44,17 @@ class SuccessPage extends StatelessWidget {
                   child: Text(
                     'Back to Home',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: white,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          Spacer(), // Spacer to push content to the center
+          Spacer(),
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
-            child: Text(
-              'Copyright © 2024 SD-H USAI',
-              style: TextStyle(
-                fontSize: 12.0,
-                color: Colors.grey,
-              ),
-            ),
+            child: Text('Copyright © 2024 SD-H USAI', style: copyrightText),
           ),
         ],
       ),
