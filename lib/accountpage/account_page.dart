@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uas/accountpage/edit_profile_page.dart';
 import 'package:uas/auth/auth_service.dart';
+import 'package:uas/design/design.dart';
 import 'package:uas/routes.dart';
 
 class AccountPage extends StatefulWidget {
@@ -21,7 +22,10 @@ class _AccountPageState extends State<AccountPage> {
     if (user == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Account'),
+          title: Text(
+            'Profile',
+            style: appBar,
+          ),
         ),
         body: Center(
           child: Text('No user is signed in.'),
@@ -31,7 +35,10 @@ class _AccountPageState extends State<AccountPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(
+          'Profile',
+          style: appBar,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -58,7 +65,7 @@ class _AccountPageState extends State<AccountPage> {
           return Center(
             child: Column(
               children: [
-                SizedBox(height: 20),
+                h(20),
                 CircleAvatar(
                   radius: 50,
                   backgroundImage: displayImageUrl != null
@@ -66,33 +73,32 @@ class _AccountPageState extends State<AccountPage> {
                       : AssetImage('assets/avatar.png')
                           as ImageProvider<Object>?,
                 ),
-                SizedBox(height: 10),
+                h(10),
                 Text(
                   userData?['username'] ??
                       user?.displayName ??
                       'No display name',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: headerText(24),
                 ),
                 Text(
                   userData?['email'] ?? user?.email ?? 'No email',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                  style: customText(
+                    16,
+                    FontWeight.normal,
+                    grey600,
                   ),
                 ),
                 Text(
                   userData?['phoneNumber'] ??
                       user?.phoneNumber ??
                       'No Phone Number',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                  style: customText(
+                    16,
+                    FontWeight.normal,
+                    grey600,
                   ),
                 ),
-                SizedBox(height: 40),
+                h(40),
                 Card(
                   elevation: 6.0,
                   margin: EdgeInsets.symmetric(horizontal: 20),
@@ -129,7 +135,7 @@ class _AccountPageState extends State<AccountPage> {
                       ListTile(
                         title: Text(
                           'Log Out',
-                          style: TextStyle(color: Colors.orange),
+                          style: TextStyle(color: primaryColor),
                         ),
                         onTap: () async {
                           await _auth.signout();
@@ -152,7 +158,6 @@ class _AccountPageState extends State<AccountPage> {
       context,
       MaterialPageRoute(builder: (context) => EditProfilePage()),
     ).then((value) {
-      // Reload the page after returning from EditProfilePage
       setState(() {});
     });
   }

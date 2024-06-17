@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uas/design/design.dart';
+import 'package:uas/models/History.dart';
 import 'package:uas/widgets/card.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _HistoryPageState extends State<HistoryPage> {
           selectedCategory = label.toLowerCase();
         });
       },
-      selectedColor: Colors.orange,
+      selectedColor: primaryColor,
       showCheckmark: false,
     );
   }
@@ -49,9 +50,10 @@ class _HistoryPageState extends State<HistoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("History", style: appBar),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: Text(
+          "History",
+          style: appBar,
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -65,13 +67,13 @@ class _HistoryPageState extends State<HistoryPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   buildChoiceChip('All'),
-                  const SizedBox(width: 10),
+                  w(10),
                   buildChoiceChip('Ticket'),
-                  const SizedBox(width: 10),
+                  w(10),
                   buildChoiceChip('Food'),
                 ],
               ),
-              const SizedBox(height: 16),
+              h(16),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: query.snapshots(),
@@ -87,27 +89,37 @@ class _HistoryPageState extends State<HistoryPage> {
                     List<Map<String, dynamic>> historyItems =
                         snapshot.data!.docs.map((doc) {
                       var items = List<Map<String, dynamic>>.from(doc['items']);
+                      String imageUrl;
+                      if (items.isNotEmpty) {
+                        if (items[0]['category'] == 'ticket') {
+                          imageUrl = 'assets/ticketIcon.png';
+                        } else if (items[0]['category'] == 'food') {
+                          imageUrl = 'assets/foodIcon.png';
+                        } else {
+                          imageUrl = items[0]['imageUrl'] ?? '';
+                        }
+                      } else {
+                        imageUrl = '';
+                      }
                       return {
-                        'imageUrl': items[0]['imageUrl'],
-                        'title': items[0]['name'],
-                        'category': items[0]['category'],
-                        'finalPrice': doc['finalPrice'],
-                        'paymentMethod': doc['paymentMethod'],
+                        'imageUrl': imageUrl,
+                        'title': items.isNotEmpty ? items[0]['name'] ?? '' : '',
+                        'category':
+                            items.isNotEmpty ? items[0]['category'] ?? '' : '',
+                        'finalPrice': doc['finalPrice'] ?? '',
+                        'paymentMethod': doc['paymentMethod'] ?? '',
                         'date': (doc['date'] as Timestamp).toDate().toString(),
                       };
                     }).toList();
-
-                    // Filter items based on selectedCategory
                     if (selectedCategory != 'all') {
                       historyItems = historyItems.where((item) {
                         return item['category'].toString().toLowerCase() ==
                             selectedCategory;
                       }).toList();
                     }
-
                     return ListView(
                       children: historyItems.map((item) {
-                        return HistoryItem(
+                        HistoryItem historyItem = HistoryItem(
                           imageUrl: item['imageUrl']!,
                           title: item['title']!,
                           category: item['category']!,
@@ -115,6 +127,7 @@ class _HistoryPageState extends State<HistoryPage> {
                           paymentMethod: item['paymentMethod']!,
                           date: item['date']!,
                         );
+                        return HistoryItemCard(historyItem: historyItem);
                       }).toList(),
                     );
                   },

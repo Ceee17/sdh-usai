@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uas/design/design.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/models/Food.dart';
+import 'package:uas/models/History.dart';
+import 'package:uas/models/Member.dart';
 import 'package:uas/models/Review.dart';
 import 'package:uas/models/Zone.dart';
 import 'package:uas/routes.dart';
@@ -149,7 +152,7 @@ class _ZoneCardState extends State<ZoneCard> {
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0),
                 ),
-                child: Image.network(
+                child: Image.asset(
                   widget.zone.image,
                   width: double.infinity,
                   height: 130,
@@ -188,10 +191,25 @@ class FoodCard extends StatefulWidget {
 class _FoodCardState extends State<FoodCard> {
   bool isFavorite = false;
 
-  void toggleFavorite() {
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteState();
+  }
+
+  void _loadFavoriteState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isFavorite = prefs.getBool(widget.food.title) ?? false;
+    });
+  }
+
+  void _toggleFavorite() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       isFavorite = !isFavorite;
     });
+    await prefs.setBool(widget.food.title, isFavorite);
     Fluttertoast.showToast(
       msg: isFavorite
           ? "Item has been saved to Favourites"
@@ -222,7 +240,7 @@ class _FoodCardState extends State<FoodCard> {
                 child: ClipRRect(
                   borderRadius:
                       const BorderRadius.vertical(top: Radius.circular(10)),
-                  child: Image.network(
+                  child: Image.asset(
                     widget.food.image,
                     width: double.infinity,
                     height: 130,
@@ -253,7 +271,7 @@ class _FoodCardState extends State<FoodCard> {
               isFavorite ? Icons.favorite : Icons.favorite_border,
               color: primaryColor,
             ),
-            onPressed: toggleFavorite,
+            onPressed: _toggleFavorite,
           ),
         ),
       ],
@@ -274,47 +292,37 @@ Widget buildCartFoodCard(CartFood item, Function _updateQuantity) {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(
+              child: Image.asset(
                 item.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: 200.0,
               ),
             ),
-            SizedBox(height: 10.0),
+            h(10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      item.name,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(height: 5.0),
-                    Text(
-                      'Rp. $itemPrice,00',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14.0,
-                      ),
-                    ),
+                    Text(item.name, style: headerText(16)),
+                    h(5),
+                    Text('Rp. $itemPrice,00', style: priceText),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.remove),
+                      icon: Icon(Icons.remove_circle_outline),
+                      color: primaryColor,
                       onPressed: () => _updateQuantity(item, false),
                     ),
                     Text('${item.quantity}'),
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(Icons.add_circle_outline),
+                      color: primaryColor,
                       onPressed: () => _updateQuantity(item, true),
                     ),
                   ],
@@ -329,37 +337,35 @@ Widget buildCartFoodCard(CartFood item, Function _updateQuantity) {
 }
 
 // HISTORY CARD
-class HistoryItem extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String date;
-  final String category;
-  final String finalPrice; // Add this line
-  final String paymentMethod; // Add this line
+class HistoryItemCard extends StatelessWidget {
+  final HistoryItem historyItem;
 
-  const HistoryItem({
-    required this.imageUrl,
-    required this.title,
-    required this.date,
-    required this.category,
-    required this.finalPrice, // Add this line
-    required this.paymentMethod, // Add this line
-  });
+  HistoryItemCard({required this.historyItem});
 
   @override
   Widget build(BuildContext context) {
+    final double imageWidth = 50; // Ubah sesuai kebutuhan
+    final double imageHeight = 100; // Ubah sesuai kebutuhan
+    final double borderRadius = 6.0; // Ubah sesuai kebutuhan
+
     return Card(
       child: ListTile(
-        leading: Image.network(imageUrl),
-        title: Text(title),
-        subtitle: Text("$date\n$finalPrice\n$paymentMethod"),
-        trailing: Text(category),
+        leading: Container(
+          width: imageWidth,
+          height: imageHeight,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius),
+            child: Image.asset(historyItem.imageUrl, fit: BoxFit.contain),
+          ),
+        ),
+        subtitle: Text(
+            "${historyItem.date}\n${historyItem.finalPrice}\n${historyItem.paymentMethod}"),
       ),
     );
   }
 }
 
-// PAKCET CARD
+// PACKET CARD
 class PacketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -375,6 +381,218 @@ class PacketCard extends StatelessWidget {
         onTap: () {
           navigateToOrderTicketPage(context);
         },
+      ),
+    );
+  }
+}
+
+// SEARCH CARD
+Widget SearchCard(String title, String imagePath, String category,
+    {int? priceStart, int? priceEnd}) {
+  final formattedPrice = NumberFormat.decimalPattern('id');
+  final formattedStartPrice =
+      priceStart != null ? formattedPrice.format(priceStart) : null;
+  final formattedEndPrice =
+      priceEnd != null ? formattedPrice.format(priceEnd) : null;
+
+  return Card(
+    color: white,
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
+            child: Image.asset(
+              imagePath,
+              width: double.infinity,
+              height: 130,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          height: 92,
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: cardText),
+              h(4),
+              if ((category == 'ticket' &&
+                      formattedStartPrice != null &&
+                      formattedEndPrice != null) ||
+                  (category == 'food' && formattedStartPrice != null))
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      category == 'ticket'
+                          ? "Rp. $formattedStartPrice,00 -      Rp. $formattedEndPrice,00"
+                          : "Rp. $formattedStartPrice,00",
+                      style: priceText,
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget FeaturedCard(String imageUrl, String title) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+    child: Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+          child: Image.asset(
+            imageUrl,
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned(
+          bottom: 16.0,
+          left: 16.0,
+          child: Text(
+            title,
+            style: cardText,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// TICKET ORDER DETAIL CARD
+Widget TicketDetailCard(
+    String title, int count, int price, Function(int) onChanged) {
+  String imageUrl;
+  if (title == 'Adults') {
+    imageUrl = 'assets/ticketage/adults.png';
+  } else {
+    imageUrl = 'assets/ticketage/kids.png';
+  }
+  final numberFormat = NumberFormat.decimalPattern('id');
+  final itemPrice = numberFormat.format(price);
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 0),
+    child: Card(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image.asset(
+                imageUrl,
+                fit: BoxFit.cover,
+                width: 100.0,
+              ),
+            ),
+            h(10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title, style: cardText),
+                    h(5),
+                    Text('Rp. $itemPrice,00', style: priceText),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove_circle_outline),
+                      color: primaryColor,
+                      onPressed: count > 0 ? () => onChanged(count - 1) : null,
+                    ),
+                    Text(
+                      count.toString(),
+                      style: customText(16, FontWeight.normal, black),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline),
+                      color: primaryColor,
+                      onPressed: () => onChanged(count + 1),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+// ABOUT US CARD
+class MemberCard extends StatelessWidget {
+  final Member member;
+  const MemberCard({required this.member});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Center(
+                  child: Text(member.name),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(member.qrCodePath),
+                    SizedBox(height: 16),
+                    Text(member.link),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: primaryColor,
+            child: Text(
+              member.initials,
+              style: TextStyle(color: white),
+            ),
+          ),
+          title: Text(member.name),
+          subtitle: Text(member.id),
+        ),
       ),
     );
   }

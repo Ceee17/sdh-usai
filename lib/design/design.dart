@@ -8,11 +8,27 @@ Color grey600 = Colors.grey.shade600;
 Color black = Colors.black;
 Color red = Colors.red;
 Color green = Colors.green;
+Color blue = Colors.blue;
 
 // TextStyling
 TextStyle appBar = TextStyle(
   // fontSize: 24,
   fontWeight: FontWeight.w700,
+);
+
+TextStyle startingText(double size, FontWeight fw) {
+  return TextStyle(
+    fontSize: size,
+    fontWeight: fw,
+    fontFamily: "Poppins",
+    color: black,
+  );
+}
+
+TextStyle copyrightText = TextStyle(
+  fontSize: 12,
+  color: Colors.grey,
+  fontFamily: "Poppins",
 );
 
 TextStyle customText(double size, FontWeight weight, Color color) {
@@ -46,6 +62,12 @@ TextStyle primaryBtnText = TextStyle(
   color: white,
 );
 
+TextStyle primaryBtnTextDisabled = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.bold,
+  color: white.withOpacity(0.5),
+);
+
 TextStyle priceText = TextStyle(
   fontSize: 16,
   color: grey600,
@@ -60,6 +82,11 @@ TextStyle warningText = TextStyle(
   fontSize: 18,
   color: red,
   fontWeight: FontWeight.bold,
+);
+
+TextStyle linkText = TextStyle(
+  color: blue,
+  decoration: TextDecoration.underline,
 );
 
 TextStyle labelText = TextStyle(
@@ -91,8 +118,12 @@ BoxDecoration primaryBtnBox = BoxDecoration(
   borderRadius: BorderRadius.circular(90),
 );
 
-// GridStyling
+BoxDecoration primaryBtnBoxisabled = BoxDecoration(
+  color: primaryColor.withOpacity(0.5),
+  borderRadius: BorderRadius.circular(90),
+);
 
+// GridStyling
 SliverGridDelegateWithFixedCrossAxisCount GridFixedCrossAxisCount(
     int cAC, double cAR, double cAS, double mAS) {
   return SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,9 +132,4 @@ SliverGridDelegateWithFixedCrossAxisCount GridFixedCrossAxisCount(
     crossAxisSpacing: cAS,
     mainAxisSpacing: mAS,
   );
-
-  // crossAxisCount: 2,
-  // childAspectRatio: 3 / 4,
-  // crossAxisSpacing: 10,
-  // mainAxisSpacing: 10,
 }

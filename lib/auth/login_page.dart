@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/forgot_password_page.dart';
-import 'package:uas/auth/register_page.dart';
-import 'package:uas/startingpage/starting_page.dart';
-import 'package:uas/accountpage/account_page.dart';
-import 'package:uas/homepage/home_page.dart';
+import 'package:uas/design/design.dart';
+import 'package:uas/routes.dart';
 import 'package:uas/wrapper.dart';
 
 class LoginPage extends StatefulWidget {
@@ -37,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     final width = size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -57,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Login to your ..',
+                        'Login to your JungleFeast Account',
                         style: TextStyle(
                           fontSize: width * 0.06,
                           fontWeight: FontWeight.w900,
@@ -93,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
-                          fillColor: Color(0xffffffff),
+                          fillColor: white,
                           labelText: 'E-mail',
                         ),
                       ),
@@ -108,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 20),
                           filled: true,
-                          fillColor: Color(0xffffffff),
+                          fillColor: white,
                           labelText: 'Password',
                         ),
                       ),
@@ -126,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Forgot Password?',
                             style: TextStyle(
-                              color: Color(0xff000000),
+                              color: black,
                               fontSize: width * 0.035,
                               fontWeight: FontWeight.w400,
                             ),
@@ -147,8 +145,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFFFA62F),
-                            foregroundColor: Colors.white,
+                            backgroundColor: primaryColor,
+                            foregroundColor: white,
                             padding: EdgeInsets.symmetric(
                                 horizontal: width * 0.1,
                                 vertical: height * 0.01),
@@ -162,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         '-Or Login with-',
                         style: TextStyle(
-                          color: Color(0xff000000),
+                          color: black,
                         ),
                       ),
                       SizedBox(height: height * 0.01),
@@ -214,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                           Text(
                             'Do not have an account?',
                             style: TextStyle(
-                              color: Color(0xff000000),
+                              color: black,
                             ),
                           ),
                           SizedBox(height: height * 0.001),
@@ -223,52 +221,21 @@ class _LoginPageState extends State<LoginPage> {
                             width: width * 0.3,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                  PageRouteBuilder(
-                                    pageBuilder: (context, animation,
-                                        secondaryAnimation) {
-                                      const begin = Offset(0.0, 1.0);
-                                      const end = Offset.zero;
-                                      const curve = Curves.easeInOut;
-
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve));
-                                      var offsetAnimation =
-                                          animation.drive(tween);
-
-                                      return FadeTransition(
-                                        opacity: animation,
-                                        child: SlideTransition(
-                                          position: offsetAnimation,
-                                          child:
-                                              RegisterPage(), // Placeholder for SignupPage
-                                        ),
-                                      );
-                                    },
-                                    transitionDuration:
-                                        Duration(milliseconds: 850),
-                                  ),
-                                );
+                                navigateToSignup(context);
                               },
                               child: Text(
                                 'Sign up',
                                 style: TextStyle(
                                   color: Color(0xff8da2e2),
-                                  fontSize: width * 0.045,
+                                  fontSize: width * 0.040,
                                 ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: height * 0.05), // Added space
-                      Text(
-                        'Copyright © 2024 SD-H USAI',
-                        style: TextStyle(
-                          color: Color(0xff000000),
-                          fontSize: 13,
-                        ),
-                      ),
+                      SizedBox(height: height * 0.05),
+                      Text('Copyright © 2024 SD-H USAI', style: copyrightText),
                     ],
                   ),
                 ),
@@ -279,11 +246,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  goToSignup(BuildContext context) => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const RegisterPage()),
-      );
 
   _login() async {
     setState(() {

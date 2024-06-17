@@ -5,10 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'dart:io';
-
 import 'package:uas/design/design.dart';
-
-Color primaryColor = Color(0xFFFFA62F);
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -26,8 +23,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
   User? currentUser = FirebaseAuth.instance.currentUser;
   final _auth = AuthService();
   File? _image;
-  String? _imageUrl;
+  String? _uploadedImageUrl;
+  String? _selectedAvatarPath;
   bool isLoading = false;
+
+  final List<String> avatarNames = [
+    'bear',
+    'bee',
+    'cockatoo',
+    'crab',
+    'deer',
+    'duck',
+    'elephant',
+    'fox',
+    'harpseal',
+    'lion',
+    'monkey',
+    'octopus',
+    'owl',
+    'panda',
+    'penguin',
+    'redpanda',
+    'starfish',
+    'toucan',
+  ];
 
   @override
   void initState() {
@@ -47,7 +66,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           emailController.text = userDoc['email'];
           phoneController.text = userDoc['phoneNumber'];
           usernameController.text = userDoc['username'];
-          _imageUrl = userDoc['imageUrl'];
+          _uploadedImageUrl = userDoc['imageUrl'];
         });
       }
     }
@@ -81,7 +100,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
             .child('profile_pictures')
             .child(currentUser!.uid + '.jpg');
         await ref.putFile(_image!);
-        _imageUrl = await ref.getDownloadURL();
+        final imageUrl = await ref.getDownloadURL();
+        setState(() {
+          _uploadedImageUrl = imageUrl;
+          _selectedAvatarPath = null;
+        });
       } catch (e) {
         print('Error uploading image: $e');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -89,6 +112,96 @@ class _EditProfilePageState extends State<EditProfilePage> {
         );
       }
     }
+  }
+
+  void _chooseAvatar() async {
+    print('isi dari avatarNames $avatarNames');
+    String? selectedAvatar;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Avatar'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Click the image then press OK to apply.'),
+              h(20),
+              Wrap(
+                spacing: 10,
+                children: avatarNames.map((avatar) {
+                  String avatarPath = 'assets/avatar/$avatar.png';
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedAvatar = avatarPath;
+                      });
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(avatarPath),
+                      radius: 30,
+                      backgroundColor: Colors.transparent,
+                      child: selectedAvatar == avatarPath
+                          ? Icon(Icons.check, color: blue)
+                          : null,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _showOptionDialog();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  _selectedAvatarPath = selectedAvatar;
+                  _uploadedImageUrl = null;
+                });
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showOptionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Select Option'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('Choose Avatar'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _chooseAvatar();
+                },
+              ),
+              ListTile(
+                title: Text('Upload'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -111,13 +224,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: _imageUrl != null
-                        ? NetworkImage(_imageUrl!)
-                        : AssetImage('assets/avatar.png')
+                    backgroundImage: _selectedAvatarPath != null
+                        ? AssetImage(_selectedAvatarPath!)
+                        : (_uploadedImageUrl != null
+                                ? NetworkImage(_uploadedImageUrl!)
+                                : AssetImage('assets/avatar.png'))
                             as ImageProvider<Object>?,
                   ),
                   TextButton(
-                    onPressed: isLoading ? null : _pickImage,
+                    onPressed: isLoading ? null : _showOptionDialog,
                     child: Text('Change Picture'),
                   ),
                   h(20),
@@ -198,7 +313,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  h(20),
                   ElevatedButton(
                     onPressed: isLoading
                         ? null
@@ -217,7 +332,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   phoneController.text,
                                   usernameController.text,
                                   passwordController.text,
-                                  imageUrl: _imageUrl,
+                                  imageUrl:
+                                      _uploadedImageUrl ?? _selectedAvatarPath,
                                 );
 
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -257,7 +373,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           if (isLoading)
             Container(
-              color: Colors.black.withOpacity(0.5),
+              color: black.withOpacity(0.5),
               child: Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 3,

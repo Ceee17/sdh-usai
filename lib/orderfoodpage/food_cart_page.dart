@@ -66,8 +66,8 @@ class _CartPageState extends State<CartPage> {
                   msg: "Item has been removed from cart",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.BOTTOM,
-                  backgroundColor: Colors.black,
-                  textColor: Colors.white,
+                  backgroundColor: black,
+                  textColor: white,
                 );
               },
             ),
@@ -97,7 +97,7 @@ class _CartPageState extends State<CartPage> {
           ? Center(
               child: Text(
                 "There is nothing here :(",
-                style: TextStyle(fontSize: 18, color: Colors.grey),
+                style: customText(18, FontWeight.normal, grey),
               ),
             )
           : Column(
@@ -136,19 +136,19 @@ class _CartPageState extends State<CartPage> {
                   child: GestureDetector(
                     onTap: () {
                       navigateToPaymentPage(
-                        context,
-                        totalPrice,
-                        filteredCart
-                            .map((item) => {
-                                  'name': item.name,
-                                  'price': item.price,
-                                  'quantity': item.quantity,
-                                  'category': item.category,
-                                  'imageUrl': item.imageUrl,
-                                  'foodZone': item.foodZone,
-                                })
-                            .toList(),
-                      );
+                          context,
+                          totalPrice,
+                          filteredCart
+                              .map((item) => {
+                                    'name': item.name,
+                                    'price': item.price,
+                                    'quantity': item.quantity,
+                                    'imageUrl': item.imageUrl,
+                                    'foodZone': item.foodZone,
+                                    'category': item.category,
+                                  })
+                              .toList(),
+                          '');
                     },
                     child: PrimaryBtn('Payment'),
                   ),

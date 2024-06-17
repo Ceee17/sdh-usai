@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:uas/design/design.dart';
+import 'package:uas/listdata/featured_data.dart';
+import 'package:uas/listdata/zone_data.dart';
+import 'package:uas/widgets/card.dart';
+import 'package:uas/widgets/grid.dart';
+import 'package:uas/widgets/modal.dart';
 
 class OrderTicketPage extends StatefulWidget {
   const OrderTicketPage({super.key});
@@ -10,16 +16,14 @@ class OrderTicketPage extends StatefulWidget {
 class _OrderTicketPageState extends State<OrderTicketPage> {
   @override
   Widget build(BuildContext context) {
-    double cardWidth = MediaQuery.of(context).size.width / 2 -
-        20; // Calculate card width for 2 columns with padding
+    double cardWidth = MediaQuery.of(context).size.width / 1 - 125;
+    double cardHeight = 175;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Order Ticket',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: appBar,
         ),
         centerTitle: true,
       ),
@@ -29,60 +33,41 @@ class _OrderTicketPageState extends State<OrderTicketPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              Text(
                 'Featured',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: headerText(18),
               ),
-              const SizedBox(height: 10),
+              h(10),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: featuredCardsData.map((data) {
+                  children: featured.map((data) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 10),
                       child: SizedBox(
                         width: cardWidth,
-                        child: FeaturedCard(
-                          imageUrl: data['imageUrl']!,
-                          title: data['title']!,
+                        height: cardHeight,
+                        child: GestureDetector(
+                          onTap: () {
+                            showFeaturedDetails(context, data, data.title);
+                          },
+                          child: FeaturedCard(
+                            data.imageUrl,
+                            data.title,
+                          ),
                         ),
                       ),
                     );
                   }).toList(),
                 ),
               ),
-              const SizedBox(height: 20),
-              const Text(
+              h(20),
+              Text(
                 'Most Picked',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: headerText(18),
               ),
-              const SizedBox(height: 10),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: cardWidth /
-                      250, // Adjust the aspect ratio to fit the content
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemCount: mostPickedCardsData.length,
-                itemBuilder: (context, index) {
-                  final data = mostPickedCardsData[index];
-                  return MostPickedCard(
-                    imageUrl: data['imageUrl']!,
-                    title: data['title']!,
-                    priceRange: data['priceRange']!,
-                  );
-                },
-              ),
+              h(10),
+              buildZoneGrid(context, zoneData, 'ticketPage'),
             ],
           ),
         ),
@@ -90,139 +75,3 @@ class _OrderTicketPageState extends State<OrderTicketPage> {
     );
   }
 }
-
-class FeaturedCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-
-  const FeaturedCard({
-    required this.imageUrl,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: AspectRatio(
-        aspectRatio: 1,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-              child: Image.network(
-                imageUrl,
-                width: double.infinity,
-                height: 100,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                )),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class MostPickedCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String priceRange;
-
-  const MostPickedCard({
-    required this.imageUrl,
-    required this.title,
-    required this.priceRange,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              priceRange,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-const List<Map<String, String>> featuredCardsData = [
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Land Explorer Bundle',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Sea Explorer Bundle',
-  },
-  // Add more featured cards here if needed
-];
-
-const List<Map<String, String>> mostPickedCardsData = [
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Jungle Expedition\n(Full Day Pass)',
-    'priceRange': 'Rp. 100,000,00 - Rp. 300,000,00',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Underwater Paradise\n(Full Day Pass)',
-    'priceRange': 'Rp. 100,000,00 - Rp. 300,000,00',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Sky Sanctuary\n(Full Day Pass)',
-    'priceRange': 'Rp. 100,000,00 - Rp. 300,000,00',
-  },
-  {
-    'imageUrl': 'https://via.placeholder.com/150',
-    'title': 'Spooky Forest\n(Full Day Pass)',
-    'priceRange': 'Rp. 100,000,00 - Rp. 300,000,00',
-  },
-  // Add more most picked cards here if needed
-];
