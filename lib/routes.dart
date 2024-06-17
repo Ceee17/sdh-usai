@@ -30,7 +30,7 @@ void navigateToSignup(BuildContext context) => Navigator.of(context).push(
             opacity: animation,
             child: SlideTransition(
               position: offsetAnimation,
-              child: RegisterPage(), // Placeholder for SignupPage
+              child: RegisterPage(),
             ),
           );
         },

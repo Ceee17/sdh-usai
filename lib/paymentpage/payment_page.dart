@@ -8,6 +8,9 @@ import 'package:uas/listdata/payment_list_data.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/paymentpage/success_page.dart';
 import 'package:uas/widgets/button.dart';
+import 'package:midtrans_sdk/midtrans_sdk.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
+import 'package:uas/services/token_service.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
@@ -37,16 +40,101 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   int _selectedPaymentMethod = 1;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  MidtransSDK? _midtrans;
+  late double parsedTotalPrice = double.tryParse( widget.totalPrice.replaceAll(',', '').replaceAll('.', '')) ?? 0.0;;
+  late double tax = parsedTotalPrice * 0.1;
+  late double finalPrice = _calculatePrices();
+  late int totalQuantity;
+
+  @override
+  void initState() {
+    super.initState();
+    _initSDK();
+    _calculatePrices();
+    _calculateTotalQuantity();
+  }
+
+  void _initSDK() async {
+    _midtrans = await MidtransSDK.init(
+      config: MidtransConfig(
+        clientKey: dot_env.dotenv.env['MIDTRANS_CLIENT_KEY'] ?? "",
+        merchantBaseUrl: "",
+        colorTheme: ColorTheme(
+          colorPrimary: Colors.blue,
+          colorPrimaryDark: Colors.blue,
+          colorSecondary: Colors.blue,
+        ),
+      ),
+    );
+    _midtrans?.setUIKitCustomSetting(
+      skipCustomerDetailsPages: true,
+    );
+    _midtrans!.setTransactionFinishedCallback((result) {
+      _showToast('Transaction Completed', false);
+      _handleSuccessfulPayment();
+    });
+  }
+
+  double _calculatePrices() {
+    return parsedTotalPrice + tax;
+  }
+
+  void _calculateTotalQuantity() {
+    totalQuantity =
+        widget.cartItems.fold(0, (sum, item) => sum + item.quantity);
+  }
+
+  void _showToast(String msg, bool isError) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: isError ? Colors.red : Colors.green,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
+
+  void _handleSuccessfulPayment() {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final paymentMethodLabel = _getPaymentMethodLabel(_selectedPaymentMethod);
+
+      final historyData = {
+        'userId': userId,
+        'paymentMethod': paymentMethodLabel,
+        'items': widget.cartItems
+            .map((item) => {
+                  'name': item.name,
+                  'quantity': item.quantity,
+                  'price': item.price,
+                  'imageUrl': item.imageUrl,
+                  'foodZone': item.foodZone,
+                  'category': item.category,
+                })
+            .toList(),
+        'totalPrice': widget.totalPrice,
+        'finalPrice': finalPrice,
+        'date': Timestamp.now(),
+      };
+
+      FirebaseFirestore.instance.collection('history').add(historyData);
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessPage(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final height = size.height;
-    final double parsedTotalPrice = double.tryParse(
-            widget.totalPrice.replaceAll(',', '').replaceAll('.', '')) ??
-        0.0;
-    final double tax = parsedTotalPrice * 0.1;
-    final double finalPrice = parsedTotalPrice + tax;
     final numberFormat =
         NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
@@ -62,12 +150,12 @@ class _PaymentPageState extends State<PaymentPage> {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: white,
                       borderRadius: BorderRadius.circular(8.0),
@@ -85,7 +173,7 @@ class _PaymentPageState extends State<PaymentPage> {
                       children: [
                         Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.shopping_bag,
                               size: 50,
                             ),
@@ -141,7 +229,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Text(
+                          child: const Text(
                             'Order details',
                             style: linkText,
                           ),
@@ -199,7 +287,7 @@ class _PaymentPageState extends State<PaymentPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: SizedBox(
               width: double.infinity,
               height: height * 0.06,
@@ -229,6 +317,26 @@ class _PaymentPageState extends State<PaymentPage> {
       final userId = user.uid;
       final paymentMethodLabel = _getPaymentMethodLabel(_selectedPaymentMethod);
 
+      if (_selectedPaymentMethod == 8) {
+        // Midtrans
+        final result = await TokenService().getToken(
+          widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "Product",
+          finalPrice,
+          totalQuantity,
+        );
+        if (result.isRight()) {
+          String? token = result.fold((l) => null, (r) => r.token);
+          if (token == null) {
+            _showToast('Token cannot be null', true);
+            return;
+          }
+          _midtrans?.startPaymentUiFlow(
+            token: token,
+          );
+        } else {
+          _showToast('Transaction Failed', true);
+        }
+      } else {
       final historyData = {
         'userId': userId,
         'paymentMethod': paymentMethodLabel,
@@ -276,6 +384,7 @@ class _PaymentPageState extends State<PaymentPage> {
           MaterialPageRoute(
             builder: (context) => SuccessPage(),
           ));
+      }
     }
   }
 
@@ -295,6 +404,8 @@ class _PaymentPageState extends State<PaymentPage> {
         return 'dana';
       case 7:
         return 'linkaja';
+      case 8:
+        return 'midtrans';
       default:
         return 'unknown';
     }

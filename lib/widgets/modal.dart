@@ -61,7 +61,6 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                     matchingZone.onTap!(context);
                   }
                 }
-
                 if (!foodFound) {
                   tempFoodCart.add(CartFood(
                     name: food.title,
@@ -75,7 +74,6 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                     matchingZone.onTap!(context);
                   }
                 }
-
                 Fluttertoast.showToast(
                   msg: "${food.title} added to cart successfully",
                   toastLength: Toast.LENGTH_SHORT,
@@ -122,7 +120,6 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
               GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-
                   if (sourcePage == 'searchPage') {
                     showConfirmationDialogSearchPage(food, food.zone);
                   } else {
@@ -135,7 +132,6 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                         break;
                       }
                     }
-
                     if (!foodFound) {
                       tempFoodCart.add(CartFood(
                         name: food.title,
@@ -146,7 +142,6 @@ void showFoodDetails(BuildContext context, Food food, String sourcePage) {
                         category: food.category,
                       ));
                     }
-
                     Fluttertoast.showToast(
                       msg: "Item added to cart successfully",
                       toastLength: Toast.LENGTH_SHORT,
@@ -293,37 +288,3 @@ void showFeaturedDetails(
     },
   );
 }
-
-// CALENDAR MODAL
-// void showCalendarModal(BuildContext context, String title) {
-//   showModalBottomSheet(
-//     context: context,
-//     isScrollControlled: true,
-//     backgroundColor: Colors.transparent,
-//     builder: (context) {
-//       return DraggableScrollableSheet(
-//         expand: false,
-//         initialChildSize: 0.7,
-//         maxChildSize: 0.7,
-//         minChildSize: 0.3,
-//         builder: (context, scrollController) {
-//           return Container(
-//             decoration: BoxDecoration(
-//               color: white,
-//               borderRadius:
-//                   const BorderRadius.vertical(top: Radius.circular(20)),
-//             ),
-//             padding: const EdgeInsets.all(16),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Text('Select Date', style: clipText),
-//                 h(16),
-//               ],
-//             ),
-//           );
-//         },
-//       );
-//     },
-//   );
-// }

@@ -45,7 +45,6 @@ final List<Food> Foods = [
     zone: 'fauna',
     category: 'food',
   ),
-
   // SEA
   Food(
     image: 'assets/food/oceanbreezesalad.jpg',

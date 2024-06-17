@@ -365,7 +365,7 @@ class HistoryItemCard extends StatelessWidget {
   }
 }
 
-// PAKCET CARD
+// PACKET CARD
 class PacketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -547,7 +547,6 @@ Widget TicketDetailCard(
 // ABOUT US CARD
 class MemberCard extends StatelessWidget {
   final Member member;
-
   const MemberCard({required this.member});
 
   @override

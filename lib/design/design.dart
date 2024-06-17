@@ -124,7 +124,6 @@ BoxDecoration primaryBtnBoxisabled = BoxDecoration(
 );
 
 // GridStyling
-
 SliverGridDelegateWithFixedCrossAxisCount GridFixedCrossAxisCount(
     int cAC, double cAR, double cAS, double mAS) {
   return SliverGridDelegateWithFixedCrossAxisCount(
@@ -133,9 +132,4 @@ SliverGridDelegateWithFixedCrossAxisCount GridFixedCrossAxisCount(
     crossAxisSpacing: cAS,
     mainAxisSpacing: mAS,
   );
-
-  // crossAxisCount: 2,
-  // childAspectRatio: 3 / 4,
-  // crossAxisSpacing: 10,
-  // mainAxisSpacing: 10,
 }

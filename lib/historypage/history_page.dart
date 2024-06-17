@@ -111,14 +111,12 @@ class _HistoryPageState extends State<HistoryPage> {
                         'date': (doc['date'] as Timestamp).toDate().toString(),
                       };
                     }).toList();
-
                     if (selectedCategory != 'all') {
                       historyItems = historyItems.where((item) {
                         return item['category'].toString().toLowerCase() ==
                             selectedCategory;
                       }).toList();
                     }
-
                     return ListView(
                       children: historyItems.map((item) {
                         HistoryItem historyItem = HistoryItem(
