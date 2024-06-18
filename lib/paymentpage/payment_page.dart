@@ -104,6 +104,9 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _handleSuccessfulPayment() {
     User? user = _auth.currentUser;
+    final numberFormat =
+        NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
+
     if (user != null) {
       final userId = user.uid;
       final paymentMethodLabel = _getPaymentMethodLabel(_selectedPaymentMethod);
@@ -111,18 +114,32 @@ class _PaymentPageState extends State<PaymentPage> {
       final historyData = {
         'userId': userId,
         'paymentMethod': paymentMethodLabel,
-        'items': widget.cartItems
-            .map((item) => {
-                  'name': item.name,
-                  'quantity': item.quantity,
-                  'price': item.price,
-                  'imageUrl': item.imageUrl,
-                  'foodZone': item.foodZone,
-                  'category': item.category,
-                })
-            .toList(),
+        'items': widget.sourcePage == 'ticket'
+            ? widget.zoneItems
+                .map((item) => {
+                      'title': item['title'],
+                      'selectedDate': item['selectedDate'],
+                      'adultCount': item['adultCount'],
+                      'kidsCount': item['kidsCount'],
+                      'adultPrice': item['adultPrice'],
+                      'kidsPrice': item['kidsPrice'],
+                      'totalPrice': item['totalPrice'],
+                      'totalCount': item['totalCount'],
+                      'category': item['category'],
+                    })
+                .toList()
+            : widget.cartItems
+                .map((item) => {
+                      'name': item.name,
+                      'price': item.price,
+                      'quantity': item.quantity,
+                      'imageUrl': item.imageUrl,
+                      'foodZone': item.foodZone,
+                      'category': item.category,
+                    })
+                .toList(),
         'totalPrice': widget.totalPrice,
-        'finalPrice': finalPrice,
+        'finalPrice': numberFormat.format(finalPrice),
         'date': Timestamp.now(),
       };
 
@@ -344,7 +361,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 ? widget.zoneItems[0]['title']
                 : "Product",
             totalPrice,
-            totalZoneQuantity,
+            1,
           );
 
           if (result.isRight()) {
