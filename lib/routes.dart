@@ -191,6 +191,7 @@ void navigateToPaymentPage(BuildContext context, String totalPrice,
       builder: (context) => PaymentPage(
         totalPrice: totalPrice,
         cartItems: cartItems,
+        zoneItems: [],
         sourcePage: '',
       ),
     ),

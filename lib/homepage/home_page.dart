@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                                 : Icon(
                                     Icons.play_arrow,
                                     size: 64.0,
-                                    color: white,
+                                    color: Colors.white,
                                   ),
                           );
                         },
@@ -110,25 +110,26 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                h(20),
+                SizedBox(height: 20),
                 Text(
                   "A short video of all the places we have",
-                  style: headerText(20),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    vidController.pause();
-                  },
-                  child: PrimaryBtn('Proceed'),
-                ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      vidController.pause();
+                    },
+                    child: PrimaryBtn('Proceed')),
               ],
             ),
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      vidController.pause();
+    });
   }
 
   int _selectedIndex = 0;

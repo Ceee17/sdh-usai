@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/accountpage/account_page.dart';
 import 'package:uas/auth/auth_service.dart';
 import 'package:uas/auth/login_page.dart';
+import 'package:uas/wrapper.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -331,7 +332,11 @@ class _RegisterPageState extends State<RegisterPage> {
             'creationTime': user.metadata.creationTime?.toIso8601String(),
             'lastSignInTime': user.metadata.lastSignInTime?.toIso8601String(),
           });
-          Navigator.pop(context);
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Wrapper(),
+              ));
         }
       } catch (e) {
         print('Error: $e');
