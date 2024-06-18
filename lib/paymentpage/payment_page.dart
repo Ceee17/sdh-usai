@@ -48,6 +48,8 @@ class _PaymentPageState extends State<PaymentPage> {
   late double tax = parsedTotalPrice * 0.1;
   late double finalPrice = _calculatePrices();
   late int totalQuantity;
+  late double totalZonePrice = 0.0;
+  late int totalZoneQuantity = 0;
 
   @override
   void initState() {
@@ -84,7 +86,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _calculateTotalQuantity() {
     totalQuantity =
-        widget.cartItems!.fold(0, (sum, item) => sum + item.quantity);
+        widget.cartItems.fold(0, (sum, item) => sum + item.quantity);
   }
 
   void _showToast(String msg, bool isError) {
@@ -323,30 +325,55 @@ class _PaymentPageState extends State<PaymentPage> {
       if (_selectedPaymentMethod == 8) {
         // Midtrans
         if (widget.sourcePage == 'ticket') {
- final result = await TokenService().getToken(
-    widget.zoneItems.isNotEmpty ? widget.zoneItems[0].name : "Product",
-    ,
-    totalQuantity,
-  );
-} else {
-  final result = await TokenService().getToken(
-    widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "Product",
-    this.finalPrice,
-    totalQuantity,
-  );
+          totalZonePrice = widget.zoneItems
+              .fold(0.0, (sum, item) => sum + (item['totalPrice'] as num));
+          totalZoneQuantity = widget.zoneItems
+              .fold(0, (sum, item) => sum + (item['totalCount'] as int));
 
-}
-        if (result.isRight()) {
-          String? token = result.fold((l) => null, (r) => r.token);
-          if (token == null) {
-            _showToast('Token cannot be null', true);
-            return;
-          }
-          _midtrans?.startPaymentUiFlow(
-            token: token,
+          double totalPrice = totalZonePrice + (totalZonePrice * 0.1);
+
+          final result = await TokenService().getToken(
+            widget.zoneItems.isNotEmpty
+                ? widget.zoneItems[0]['title']
+                : "Product",
+            totalPrice,
+            totalZoneQuantity,
           );
+
+          if (result.isRight()) {
+            String? token = result.fold((l) => null, (r) => r.token);
+            if (token == null) {
+              _showToast('Token cannot be null', true);
+              return;
+            }
+            _midtrans?.startPaymentUiFlow(
+              token: token,
+            );
+          } else {
+            _showToast('Transaction Failed', true);
+          }
         } else {
-          _showToast('Transaction Failed', true);
+          totalZonePrice = 0.0;
+          totalZoneQuantity = 0;
+
+          final result = await TokenService().getToken(
+            widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "Product",
+            this.finalPrice,
+            totalQuantity,
+          );
+
+          if (result.isRight()) {
+            String? token = result.fold((l) => null, (r) => r.token);
+            if (token == null) {
+              _showToast('Token cannot be null', true);
+              return;
+            }
+            _midtrans?.startPaymentUiFlow(
+              token: token,
+            );
+          } else {
+            _showToast('Transaction Failed', true);
+          }
         }
       } else {
         final historyData = {
