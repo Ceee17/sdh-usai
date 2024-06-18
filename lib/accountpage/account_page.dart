@@ -60,6 +60,7 @@ class _AccountPageState extends State<AccountPage> {
             userData = snapshot.data!.data() as Map<String, dynamic>;
           }
 
+          String? avatarUrl = userData?['avatarUrl'];
           String? displayImageUrl = user?.photoURL ?? userData?['imageUrl'];
 
           return Center(
@@ -70,8 +71,7 @@ class _AccountPageState extends State<AccountPage> {
                   radius: 50,
                   backgroundImage: displayImageUrl != null
                       ? NetworkImage(displayImageUrl)
-                      : AssetImage('assets/avatar.png')
-                          as ImageProvider<Object>?,
+                      : AssetImage(avatarUrl!) as ImageProvider<Object>?,
                 ),
                 h(10),
                 Text(
@@ -111,7 +111,7 @@ class _AccountPageState extends State<AccountPage> {
                         title: Text('Edit Profile'),
                         onTap: user?.photoURL == null
                             ? () {
-                                _navigateToEditProfilePage(context);
+                                _navigateToEditProfilePage(context, avatarUrl!);
                               }
                             : null,
                         enabled: user?.photoURL == null ? true : false,
@@ -153,10 +153,13 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  void _navigateToEditProfilePage(BuildContext context) {
+  void _navigateToEditProfilePage(BuildContext context, String avatarUrls) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfilePage()),
+      MaterialPageRoute(
+          builder: (context) => EditProfilePage(
+                avatarUrl: avatarUrls,
+              )),
     ).then((value) {
       setState(() {});
     });

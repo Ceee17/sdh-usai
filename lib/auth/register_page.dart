@@ -14,6 +14,27 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final List<String> _avatarUrls = [
+    'assets/avatar/bear.png',
+    'assets/avatar/bee.png',
+    'assets/avatar/cockatoo.png',
+    'assets/avatar/crab.png',
+    'assets/avatar/deer.png',
+    'assets/avatar/duck.png',
+    'assets/avatar/elephant.png',
+    'assets/avatar/fox.png',
+    'assets/avatar/harpseal.png',
+    'assets/avatar/lion.png',
+    'assets/avatar/monkey.png',
+    'assets/avatar/octopus.png',
+    'assets/avatar/owl.png',
+    'assets/avatar/panda.png',
+    'assets/avatar/penguin.png',
+    'assets/avatar/redpanda.png',
+    'assets/avatar/starfish.png',
+    'assets/avatar/toucan.png',
+  ];
+
   final _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
 
@@ -319,6 +340,9 @@ class _RegisterPageState extends State<RegisterPage> {
             await _auth.createUserWithEmailAndPassword(email, password);
 
         if (user != null) {
+          // Pilih URL avatar secara random
+          final String avatarUrl = (_avatarUrls..shuffle()).first;
+
           // Save additional user data in Firestore
           await FirebaseFirestore.instance
               .collection('users')
@@ -328,6 +352,7 @@ class _RegisterPageState extends State<RegisterPage> {
             'email': email,
             'phoneNumber': phoneNumber,
             'username': username,
+            'avatarUrl': avatarUrl,
             'creationTime': user.metadata.creationTime?.toIso8601String(),
             'lastSignInTime': user.metadata.lastSignInTime?.toIso8601String(),
           });
