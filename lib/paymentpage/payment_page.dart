@@ -14,24 +14,25 @@ import 'package:uas/services/token_service.dart';
 
 class PaymentPage extends StatefulWidget {
   final String totalPrice;
-  final List<CartFood>? cartItems;
-  final List<Map<String, dynamic>>? zoneItems;
+  final List<CartFood> cartItems;
+  final List<Map<String, dynamic>> zoneItems;
   final String sourcePage;
 
-  const PaymentPage({
+  PaymentPage({
     super.key,
     required this.totalPrice,
-    this.cartItems,
-    this.zoneItems,
+    required this.cartItems,
+    required this.zoneItems,
     required this.sourcePage,
-  }) : assert(
-            (sourcePage == 'ticket' &&
-                    zoneItems != null &&
-                    cartItems == null) ||
-                (sourcePage != 'ticket' &&
-                    cartItems != null &&
-                    zoneItems == null),
-            'For tickets, zoneItems must be provided and cartItems must be null. For non-tickets, cartItems must be provided and zoneItems must be null.');
+  });
+  // : assert(
+  //           (sourcePage == 'ticket' &&
+  //                   zoneItems != null &&
+  //                   cartItems == null) ||
+  //               (sourcePage != 'ticket' &&
+  //                   cartItems != null &&
+  //                   zoneItems == null),
+  //           'For tickets, zoneItems must be provided and cartItems must be null. For non-tickets, cartItems must be provided and zoneItems must be null.');
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -41,7 +42,9 @@ class _PaymentPageState extends State<PaymentPage> {
   int _selectedPaymentMethod = 1;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   MidtransSDK? _midtrans;
-  late double parsedTotalPrice = double.tryParse( widget.totalPrice.replaceAll(',', '').replaceAll('.', '')) ?? 0.0;;
+  late double parsedTotalPrice = double.tryParse(
+          widget.totalPrice.replaceAll(',', '').replaceAll('.', '')) ??
+      0.0;
   late double tax = parsedTotalPrice * 0.1;
   late double finalPrice = _calculatePrices();
   late int totalQuantity;
@@ -81,7 +84,7 @@ class _PaymentPageState extends State<PaymentPage> {
 
   void _calculateTotalQuantity() {
     totalQuantity =
-        widget.cartItems.fold(0, (sum, item) => sum + item.quantity);
+        widget.cartItems!.fold(0, (sum, item) => sum + item.quantity);
   }
 
   void _showToast(String msg, bool isError) {
@@ -229,7 +232,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: const Text(
+                          child: Text(
                             'Order details',
                             style: linkText,
                           ),
@@ -319,11 +322,20 @@ class _PaymentPageState extends State<PaymentPage> {
 
       if (_selectedPaymentMethod == 8) {
         // Midtrans
-        final result = await TokenService().getToken(
-          widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "Product",
-          finalPrice,
-          totalQuantity,
-        );
+        if (widget.sourcePage == 'ticket') {
+ final result = await TokenService().getToken(
+    widget.zoneItems.isNotEmpty ? widget.zoneItems[0].name : "Product",
+    ,
+    totalQuantity,
+  );
+} else {
+  final result = await TokenService().getToken(
+    widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "Product",
+    this.finalPrice,
+    totalQuantity,
+  );
+
+}
         if (result.isRight()) {
           String? token = result.fold((l) => null, (r) => r.token);
           if (token == null) {
@@ -337,53 +349,53 @@ class _PaymentPageState extends State<PaymentPage> {
           _showToast('Transaction Failed', true);
         }
       } else {
-      final historyData = {
-        'userId': userId,
-        'paymentMethod': paymentMethodLabel,
-        'items': widget.sourcePage == 'ticket'
-            ? widget.zoneItems!
-                .map((item) => {
-                      'title': item['title'],
-                      'selectedDate': item['selectedDate'],
-                      'adultCount': item['adultCount'],
-                      'kidsCount': item['kidsCount'],
-                      'adultPrice': item['adultPrice'],
-                      'kidsPrice': item['kidsPrice'],
-                      'totalPrice': item['totalPrice'],
-                      'totalCount': item['totalCount'],
-                      'category': item['category'],
-                    })
-                .toList()
-            : widget.cartItems!
-                .map((item) => {
-                      'name': item.name,
-                      'price': item.price,
-                      'quantity': item.quantity,
-                      'imageUrl': item.imageUrl,
-                      'foodZone': item.foodZone,
-                      'category': item.category,
-                    })
-                .toList(),
-        'totalPrice': widget.totalPrice,
-        'finalPrice': finalPrice,
-        'date': Timestamp.now(),
-      };
+        final historyData = {
+          'userId': userId,
+          'paymentMethod': paymentMethodLabel,
+          'items': widget.sourcePage == 'ticket'
+              ? widget.zoneItems
+                  .map((item) => {
+                        'title': item['title'],
+                        'selectedDate': item['selectedDate'],
+                        'adultCount': item['adultCount'],
+                        'kidsCount': item['kidsCount'],
+                        'adultPrice': item['adultPrice'],
+                        'kidsPrice': item['kidsPrice'],
+                        'totalPrice': item['totalPrice'],
+                        'totalCount': item['totalCount'],
+                        'category': item['category'],
+                      })
+                  .toList()
+              : widget.cartItems
+                  .map((item) => {
+                        'name': item.name,
+                        'price': item.price,
+                        'quantity': item.quantity,
+                        'imageUrl': item.imageUrl,
+                        'foodZone': item.foodZone,
+                        'category': item.category,
+                      })
+                  .toList(),
+          'totalPrice': widget.totalPrice,
+          'finalPrice': this.finalPrice,
+          'date': Timestamp.now(),
+        };
 
-      await FirebaseFirestore.instance.collection('history').add(historyData);
+        await FirebaseFirestore.instance.collection('history').add(historyData);
 
-      Fluttertoast.showToast(
-        msg: "Payment Successful!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP,
-        backgroundColor: green,
-        textColor: white,
-      );
+        Fluttertoast.showToast(
+          msg: "Payment Successful!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.TOP,
+          backgroundColor: green,
+          textColor: white,
+        );
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SuccessPage(),
-          ));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SuccessPage(),
+            ));
       }
     }
   }

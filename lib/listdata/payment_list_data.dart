@@ -34,4 +34,9 @@ final paymentMethods = [
     'image': 'assets/payment/linkaja.png',
     'value': 7,
   },
+  {
+    'label': 'Midtrans', // Added Midtrans
+    'image': 'assets/payment/midtrans.png',
+    'value': 8,
+  },
 ];

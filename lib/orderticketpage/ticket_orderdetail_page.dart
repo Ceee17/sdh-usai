@@ -120,6 +120,7 @@ void navigateToPaymentPageFromTicket(BuildContext context, String totalPrice,
     MaterialPageRoute(
       builder: (context) => PaymentPage(
         totalPrice: totalPrice,
+        cartItems: [],
         zoneItems: items,
         sourcePage: sourcePage,
       ),
