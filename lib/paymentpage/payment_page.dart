@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:uas/design/design.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uas/listdata/food_data.dart';
 import 'package:uas/listdata/payment_list_data.dart';
 import 'package:uas/models/CartFood.dart';
 import 'package:uas/paymentpage/success_page.dart';
@@ -126,6 +127,12 @@ class _PaymentPageState extends State<PaymentPage> {
       };
 
       FirebaseFirestore.instance.collection('history').add(historyData);
+
+      setState(() {
+        tempFoodCart.removeWhere(
+            (item) => item.foodZone == widget.cartItems[0].foodZone);
+        widget.cartItems.clear();
+      });
 
       Navigator.pushReplacement(
         context,
@@ -298,8 +305,7 @@ class _PaymentPageState extends State<PaymentPage> {
               height: height * 0.06,
               child: ElevatedButton(
                 onPressed: () {
-                  _handleProceedPayment(
-                      context, numberFormat.format(finalPrice));
+                  _handleProceedPayment(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -316,12 +322,13 @@ class _PaymentPageState extends State<PaymentPage> {
     );
   }
 
-  void _handleProceedPayment(BuildContext context, String finalPrice) async {
+  void _handleProceedPayment(BuildContext context) async {
+    final numberFormat =
+        NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
     User? user = _auth.currentUser;
     if (user != null) {
       final userId = user.uid;
       final paymentMethodLabel = _getPaymentMethodLabel(_selectedPaymentMethod);
-
       if (_selectedPaymentMethod == 8) {
         // Midtrans
         if (widget.sourcePage == 'ticket') {
@@ -404,11 +411,17 @@ class _PaymentPageState extends State<PaymentPage> {
                       })
                   .toList(),
           'totalPrice': widget.totalPrice,
-          'finalPrice': this.finalPrice,
+          'finalPrice': numberFormat.format(finalPrice),
           'date': Timestamp.now(),
         };
 
         await FirebaseFirestore.instance.collection('history').add(historyData);
+
+        setState(() {
+          tempFoodCart.removeWhere(
+              (item) => item.foodZone == widget.cartItems[0].foodZone);
+          widget.cartItems.clear();
+        });
 
         Fluttertoast.showToast(
           msg: "Payment Successful!",
